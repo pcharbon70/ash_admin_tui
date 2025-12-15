@@ -21,7 +21,8 @@ defmodule AshAdminTui.MixProject do
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test
-      ]
+      ],
+      dialyzer: dialyzer()
     ]
   end
 
@@ -75,6 +76,19 @@ defmodule AshAdminTui.MixProject do
       source_url: @source_url,
       source_ref: "v#{@version}",
       extras: ["README.md", "LICENSE.md"]
+    ]
+  end
+
+  defp dialyzer do
+    [
+      plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
+      plt_add_apps: [:mix, :ex_unit],
+      flags: [
+        :error_handling,
+        :underspecs,
+        :unmatched_returns
+      ],
+      ignore_warnings: ".dialyzer_ignore.exs"
     ]
   end
 end

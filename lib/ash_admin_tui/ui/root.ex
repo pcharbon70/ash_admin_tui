@@ -14,7 +14,7 @@ defmodule AshAdminTui.UI.Root do
   """
 
   alias TermUI.Event
-  alias TermUI.Widget.{Label, Block}
+  alias TermUI.Widget.{Block, Label}
 
   @doc """
   Initializes the root component state.

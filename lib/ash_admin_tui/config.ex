@@ -76,9 +76,8 @@ defmodule AshAdminTui.Config do
   def validate do
     # For MVP, all configuration is optional
     # Future versions may add required configuration
-    with :ok <- validate_log_level(),
-         :ok <- validate_theme() do
-      :ok
+    with :ok <- validate_log_level() do
+      validate_theme()
     end
   end
 
