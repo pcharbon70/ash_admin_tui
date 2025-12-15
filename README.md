@@ -18,12 +18,13 @@ While AshAdmin's Phoenix LiveView interface is excellent for web-based administr
 
 ## Project Status
 
-⚠️ **Early Development** - This project is currently in the research and planning phase. Implementation has not yet begun.
+⚠️ **Early Development** - This project is currently in the early implementation phase.
 
 Current phase:
 - ✅ Research completed (see `notes/research/designing-a-tui-for-ash-admin.md`)
-- 🔄 Architecture planning in progress
-- ⏳ Implementation not started
+- ✅ Planning completed (see `notes/planning/`)
+- 🔄 Implementation Phase 1: Foundation in progress
+- ⏳ Core features not yet implemented
 
 ## Planned Features
 
@@ -173,11 +174,37 @@ cd ash_admin_tui
 # Install dependencies
 mix deps.get
 
-# Run tests (when available)
+# Compile the project
+mix compile
+
+# Run tests
 mix test
 
-# Start development
-mix run --no-halt
+# Run code quality checks
+mix format --check-formatted
+mix credo --strict
+mix dialyzer
+
+# Generate documentation
+mix docs
+```
+
+### Project Structure
+
+```
+ash_admin_tui/
+├── lib/
+│   ├── ash_admin_tui.ex              # Main module
+│   ├── ash_admin_tui/
+│   │   ├── application.ex            # OTP Application
+│   │   ├── ui/                       # TermUI components (future)
+│   │   └── core/                     # Ash integration logic (future)
+│   └── mix/
+│       └── tasks/                    # Custom Mix tasks (future)
+├── test/                             # Test files
+├── config/                           # Application configuration
+├── notes/                            # Planning and research documents
+└── mix.exs                           # Project definition
 ```
 
 ## Roadmap
