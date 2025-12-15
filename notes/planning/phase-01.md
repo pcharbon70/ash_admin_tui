@@ -264,54 +264,54 @@ Configure ExUnit testing framework with coverage reporting and Mimic for mocking
 
 ## 1.7 Integration Tests
 
-- [ ] **Section 1.7 Complete**
+- [x] **Section 1.7 Complete**
 
 Integration tests validate that all Phase 1 components work together correctly. These tests ensure the complete system behaves as expected from end-to-end.
 
 ### 1.7.1 Application Startup
 
-- [ ] **Task 1.7.1 Complete**
+- [x] **Task 1.7.1 Complete**
 
 Test that the application starts successfully and all supervised processes initialize correctly.
 
-- [ ] Test application starts with `Application.start(:ash_admin_tui)`
-- [ ] Test supervision tree is established with Runtime GenServer
-- [ ] Test Runtime GenServer is running after application start
-- [ ] Test application stops cleanly with `Application.stop(:ash_admin_tui)`
+- [x] Test application starts with `Application.start(:ash_admin_tui)`
+- [x] Test supervision tree is established with Runtime GenServer
+- [x] Test Runtime GenServer is running after application start
+- [x] Test application stops cleanly with `Application.stop(:ash_admin_tui)`
 
 ### 1.7.2 TermUI Rendering
 
-- [ ] **Task 1.7.2 Complete**
+- [x] **Task 1.7.2 Complete**
 
 Validate that the TermUI interface renders correctly and displays the expected content.
 
-- [ ] Test Root component initializes with correct state
-- [ ] Test view/1 generates valid TermUI render tree
-- [ ] Test welcome screen contains "AshAdmin TUI" title
-- [ ] Test status bar contains "[Q] Quit" hint
-- [ ] Test layout has three sections (top bar, content, status bar)
+- [x] Test Root component initializes with correct state
+- [x] Test view/1 generates valid TermUI render tree
+- [x] Test welcome screen contains "AshAdmin TUI" title
+- [x] Test status bar contains "[Q] Quit" hint
+- [x] Test layout has three sections (top bar, content, status bar)
 
 ### 1.7.3 Event Handling
 
-- [ ] **Task 1.7.3 Complete**
+- [x] **Task 1.7.3 Complete**
 
 Verify that keyboard events are correctly processed and result in appropriate state changes.
 
-- [ ] Test pressing 'q' key generates :quit message
-- [ ] Test :quit message sets quit_requested to true
-- [ ] Test :quit message returns :stop command
-- [ ] Test application shuts down in response to :stop command
+- [x] Test pressing 'q' key generates :quit message
+- [x] Test :quit message sets quit_requested to true
+- [x] Test :quit message returns :stop command
+- [x] Test application shuts down in response to :stop command
 
 ### 1.7.4 Configuration Integration
 
-- [ ] **Task 1.7.4 Complete**
+- [x] **Task 1.7.4 Complete**
 
 Ensure configuration is loaded correctly and accessible throughout the application.
 
-- [ ] Test config values are loaded from config files
-- [ ] Test environment variables override config file values
-- [ ] Test Config module accessible from all application modules
-- [ ] Test invalid configuration triggers validation errors
+- [x] Test config values are loaded from config files
+- [x] Test environment variables override config file values
+- [x] Test Config module accessible from all application modules
+- [x] Test invalid configuration triggers validation errors
 
 ## Phase 1 Success Criteria
 
