@@ -79,14 +79,14 @@ defmodule IntegrationTest do
       state = Root.init([])
 
       assert is_map(state)
-      assert Map.has_key?(state, :view)
+      assert Map.has_key?(state, :layout)
       assert Map.has_key?(state, :quit_requested)
-      assert state.view == :welcome
+      assert is_map(state.layout)
       assert state.quit_requested == false
     end
 
     test "view/1 generates valid TermUI render tree" do
-      state = %{view: :welcome, quit_requested: false}
+      state = Root.init([])
       view_spec = Root.view(state)
 
       # Verify it's a valid widget tree (3-tuple)
@@ -100,8 +100,8 @@ defmodule IntegrationTest do
       assert is_list(children)
     end
 
-    test "welcome screen contains AshAdmin TUI title" do
-      state = %{view: :welcome, quit_requested: false}
+    test "layout screen contains AshAdmin TUI title" do
+      state = Root.init([])
       view_spec = Root.view(state)
 
       # Convert to string and verify content
@@ -109,45 +109,46 @@ defmodule IntegrationTest do
       assert view_string =~ "AshAdmin TUI"
     end
 
-    test "welcome screen contains quit hint" do
-      state = %{view: :welcome, quit_requested: false}
+    test "layout screen contains quit hint" do
+      state = Root.init([])
       view_spec = Root.view(state)
 
       # Convert to string and verify content
       view_string = inspect(view_spec)
-      assert view_string =~ "quit"
-      assert view_string =~ "'Q'"
+      assert view_string =~ "Quit"
     end
 
-    test "layout uses Block and Label widgets" do
-      state = %{view: :welcome, quit_requested: false}
+    test "layout uses Block widgets" do
+      state = Root.init([])
       view_spec = Root.view(state)
 
       # Verify widget structure
       view_string = inspect(view_spec)
       assert view_string =~ "Block"
-      assert view_string =~ "Label"
+      assert view_string =~ "VStack"
+      assert view_string =~ "SplitPane"
     end
 
     test "view changes based on state" do
-      # Test welcome state
-      welcome_state = %{view: :welcome, quit_requested: false}
-      welcome_view = inspect(Root.view(welcome_state))
-      assert welcome_view =~ "Welcome"
+      # Test normal state with layout
+      normal_state = Root.init([])
+      normal_view = inspect(Root.view(normal_state))
+      assert normal_view =~ "Resources"
+      assert normal_view =~ "Content"
 
       # Test shutdown state
-      shutdown_state = %{view: :welcome, quit_requested: true}
+      shutdown_state = %{normal_state | quit_requested: true}
       shutdown_view = inspect(Root.view(shutdown_state))
       assert shutdown_view =~ "Shutting down"
 
       # Verify they're different
-      refute welcome_view == shutdown_view
+      refute normal_view == shutdown_view
     end
   end
 
   describe "Event Handling (1.7.3)" do
     test "pressing 'q' key generates :quit message" do
-      state = %{view: :welcome, quit_requested: false}
+      state = Root.init([])
       event = %TermUI.Event.Key{key: :char, char: "q"}
 
       result = Root.event_to_msg(event, state)
@@ -155,7 +156,7 @@ defmodule IntegrationTest do
     end
 
     test "pressing 'Q' key generates :quit message" do
-      state = %{view: :welcome, quit_requested: false}
+      state = Root.init([])
       event = %TermUI.Event.Key{key: :char, char: "Q"}
 
       result = Root.event_to_msg(event, state)
@@ -163,7 +164,7 @@ defmodule IntegrationTest do
     end
 
     test ":quit message sets quit_requested to true" do
-      state = %{view: :welcome, quit_requested: false}
+      state = Root.init([])
 
       {new_state, _commands} = Root.update(:quit, state)
 
@@ -171,7 +172,7 @@ defmodule IntegrationTest do
     end
 
     test ":quit message returns :stop command" do
-      state = %{view: :welcome, quit_requested: false}
+      state = Root.init([])
 
       {_new_state, commands} = Root.update(:quit, state)
 
@@ -180,7 +181,7 @@ defmodule IntegrationTest do
     end
 
     test "other key presses are ignored" do
-      state = %{view: :welcome, quit_requested: false}
+      state = Root.init([])
 
       # Test various keys
       assert Root.event_to_msg(%TermUI.Event.Key{key: :char, char: "a"}, state) == :ignore
@@ -188,12 +189,14 @@ defmodule IntegrationTest do
       assert Root.event_to_msg(%TermUI.Event.Key{key: :char, char: "1"}, state) == :ignore
     end
 
-    test "non-key events are ignored" do
-      state = %{view: :welcome, quit_requested: false}
+    test "resize events are delegated to layout" do
+      state = Root.init([])
 
       # Test resize event
-      resize_event = %TermUI.Event.Resize{width: 80, height: 24}
-      assert Root.event_to_msg(resize_event, state) == :ignore
+      resize_event = %TermUI.Event.Resize{width: 100, height: 30}
+      result = Root.event_to_msg(resize_event, state)
+
+      assert result == {:msg, {:layout, {:resize, {100, 30}}}}
 
       # Test unknown event
       assert Root.event_to_msg(:unknown, state) == :ignore
@@ -320,10 +323,11 @@ defmodule IntegrationTest do
       state = Root.init([])
       assert state.quit_requested == false
 
-      # 3. Render welcome screen
+      # 3. Render layout screen with sidebar and content
       view = Root.view(state)
       view_string = inspect(view)
-      assert view_string =~ "Welcome"
+      assert view_string =~ "Resources"  # Sidebar title
+      assert view_string =~ "Content"    # Content area title
 
       # 4. User presses 'q'
       event = %TermUI.Event.Key{key: :char, char: "q"}

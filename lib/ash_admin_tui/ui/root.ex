@@ -9,49 +9,66 @@ defmodule AshAdminTui.UI.Root do
   ## State Structure
 
   The component maintains:
-  - `:view` - Current view mode (`:welcome` for MVP)
   - `:quit_requested` - Boolean indicating user requested exit
+  - `:layout` - Layout component state (terminal size, focus management)
   """
 
   alias TermUI.Event
   alias TermUI.Widget.{Block, Label}
+  alias AshAdminTui.Components.Layout
 
   @doc """
   Initializes the root component state.
 
-  Returns the initial state map.
+  Returns the initial state map with layout component initialized.
 
   ## Examples
 
-      iex> AshAdminTui.UI.Root.init([])
-      %{view: :welcome, quit_requested: false}
+      iex> state = AshAdminTui.UI.Root.init([])
+      iex> Map.has_key?(state, :layout)
+      true
+      iex> state.quit_requested
+      false
   """
   def init(_opts) do
     %{
-      view: :welcome,
-      quit_requested: false
+      quit_requested: false,
+      layout: Layout.init([])
     }
   end
 
   @doc """
   Converts terminal events to application messages.
 
-  Maps keyboard input events to semantic messages that the update function
-  can process. Currently handles the 'q' key for quitting the application.
+  Maps keyboard input events to semantic messages. Handles quit keys and
+  delegates other events to the Layout component for processing.
   """
   def event_to_msg(%Event.Key{key: :char, char: "q"}, _state), do: {:msg, :quit}
   def event_to_msg(%Event.Key{key: :char, char: "Q"}, _state), do: {:msg, :quit}
-  def event_to_msg(_event, _state), do: :ignore
+
+  def event_to_msg(event, state) do
+    # Delegate to Layout component for focus management and resize handling
+    case Layout.event_to_msg(event, state.layout) do
+      {:msg, msg} -> {:msg, {:layout, msg}}
+      :ignore -> :ignore
+    end
+  end
 
   @doc """
   Updates the application state based on messages.
 
   Processes messages from events and returns updated state and commands.
   The :quit message sets quit_requested and returns :stop command to exit.
+  Layout messages are delegated to the Layout component.
   """
   def update(:quit, state) do
     new_state = %{state | quit_requested: true}
     {new_state, [:stop]}
+  end
+
+  def update({:layout, layout_msg}, state) do
+    {new_layout, commands} = Layout.update(layout_msg, state.layout)
+    {%{state | layout: new_layout}, commands}
   end
 
   def update(_msg, state) do
@@ -61,48 +78,29 @@ defmodule AshAdminTui.UI.Root do
   @doc """
   Renders the terminal UI based on current state.
 
-  Creates a simple welcome screen for the MVP.
-  Returns TermUI view specification using widgets.
+  Shows shutdown screen when quitting, otherwise delegates to Layout component
+  for rendering the main interface.
   """
-  def view(state) do
-    content = welcome_content(state)
-
+  def view(%{quit_requested: true}) do
     {Block, %{
       title: "AshAdmin TUI",
       title_align: :center,
       border: :single
     }, [
       {Label, %{
-        text: content,
+        text: """
+
+
+        Shutting down AshAdmin TUI...
+
+
+        """,
         align: :center
       }}
     ]}
   end
 
-  # Private helper to generate welcome content based on state
-  defp welcome_content(%{quit_requested: true}) do
-    """
-
-
-    Shutting down AshAdmin TUI...
-
-
-    """
-  end
-
-  defp welcome_content(_state) do
-    """
-
-
-    Welcome to AshAdmin TUI
-
-    A Terminal User Interface for Ash Framework Administration
-
-
-    System ready. TermUI integration active.
-
-
-    Press 'Q' to quit
-    """
+  def view(state) do
+    Layout.view(state.layout)
   end
 end

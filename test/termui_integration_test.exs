@@ -11,10 +11,11 @@ defmodule TermuiIntegrationTest do
       assert is_map(state)
     end
 
-    test "initializes with welcome view" do
+    test "initializes with layout component" do
       state = Root.init([])
 
-      assert state.view == :welcome
+      assert Map.has_key?(state, :layout)
+      assert is_map(state.layout)
     end
 
     test "initializes with quit_requested false" do
@@ -26,39 +27,46 @@ defmodule TermuiIntegrationTest do
 
   describe "Root.event_to_msg/2" do
     test "maps 'q' key to :quit message" do
-      state = %{view: :welcome, quit_requested: false}
+      state = Root.init([])
       event = %TermUI.Event.Key{key: :char, char: "q"}
 
       assert Root.event_to_msg(event, state) == {:msg, :quit}
     end
 
     test "maps 'Q' key to :quit message" do
-      state = %{view: :welcome, quit_requested: false}
+      state = Root.init([])
       event = %TermUI.Event.Key{key: :char, char: "Q"}
 
       assert Root.event_to_msg(event, state) == {:msg, :quit}
     end
 
+    test "maps Tab key to layout toggle_focus message" do
+      state = Root.init([])
+      event = %TermUI.Event.Key{key: :char, char: "\t"}
+
+      assert Root.event_to_msg(event, state) == {:msg, {:layout, :toggle_focus}}
+    end
+
+    test "maps Resize event to layout resize message" do
+      state = Root.init([])
+      event = %TermUI.Event.Resize{width: 100, height: 30}
+
+      assert Root.event_to_msg(event, state) == {:msg, {:layout, {:resize, {100, 30}}}}
+    end
+
     test "maps other keys to :ignore" do
-      state = %{view: :welcome, quit_requested: false}
+      state = Root.init([])
       event_a = %TermUI.Event.Key{key: :char, char: "a"}
       event_b = %TermUI.Event.Key{key: :char, char: "b"}
 
       assert Root.event_to_msg(event_a, state) == :ignore
       assert Root.event_to_msg(event_b, state) == :ignore
     end
-
-    test "maps unknown events to :ignore" do
-      state = %{view: :welcome, quit_requested: false}
-
-      assert Root.event_to_msg(%TermUI.Event.Resize{width: 80, height: 24}, state) == :ignore
-      assert Root.event_to_msg(:unknown, state) == :ignore
-    end
   end
 
   describe "Root.update/2" do
     test "handles :quit message and returns :stop command" do
-      state = %{view: :welcome, quit_requested: false}
+      state = Root.init([])
 
       {new_state, commands} = Root.update(:quit, state)
 
@@ -67,24 +75,25 @@ defmodule TermuiIntegrationTest do
     end
 
     test "preserves other state when handling :quit" do
-      state = %{view: :welcome, quit_requested: false}
+      state = Root.init([])
 
       {new_state, _commands} = Root.update(:quit, state)
 
-      assert new_state.view == :welcome
+      assert Map.has_key?(new_state, :layout)
     end
 
-    test "handles :noop message without changing state" do
-      state = %{view: :welcome, quit_requested: false}
+    test "handles {:layout, message} by delegating to Layout component" do
+      state = Root.init([])
+      assert state.layout.focus == :sidebar
 
-      {new_state, commands} = Root.update(:noop, state)
+      {new_state, commands} = Root.update({:layout, :toggle_focus}, state)
 
-      assert new_state == state
+      assert new_state.layout.focus == :content
       assert commands == []
     end
 
     test "ignores unknown messages" do
-      state = %{view: :welcome, quit_requested: false}
+      state = Root.init([])
 
       {new_state, commands} = Root.update(:unknown_message, state)
 
@@ -95,7 +104,7 @@ defmodule TermuiIntegrationTest do
 
   describe "Root.view/1" do
     test "renders without errors" do
-      state = %{view: :welcome, quit_requested: false}
+      state = Root.init([])
 
       # TermUI view returns a widget spec tuple
       result = Root.view(state)
@@ -104,7 +113,7 @@ defmodule TermuiIntegrationTest do
     end
 
     test "view output contains AshAdmin TUI title" do
-      state = %{view: :welcome, quit_requested: false}
+      state = Root.init([])
 
       view_spec = Root.view(state)
 
@@ -115,30 +124,31 @@ defmodule TermuiIntegrationTest do
     end
 
     test "view output contains quit hint" do
-      state = %{view: :welcome, quit_requested: false}
+      state = Root.init([])
 
       view_spec = Root.view(state)
 
       # Convert view spec to string for inspection
       view_string = inspect(view_spec)
 
-      assert view_string =~ "quit"
+      assert view_string =~ "Quit"
     end
 
-    test "view output contains welcome message" do
-      state = %{view: :welcome, quit_requested: false}
+    test "view renders layout with sidebar and content sections" do
+      state = Root.init([])
 
       view_spec = Root.view(state)
 
       # Convert view spec to string for inspection
       view_string = inspect(view_spec)
 
-      assert view_string =~ "Welcome"
+      assert view_string =~ "Resources"  # Sidebar title
+      assert view_string =~ "Content"    # Content area title
     end
 
     test "view changes when quit is requested" do
-      state_before = %{view: :welcome, quit_requested: false}
-      state_after = %{view: :welcome, quit_requested: true}
+      state_before = Root.init([])
+      state_after = %{state_before | quit_requested: true}
 
       view_before = inspect(Root.view(state_before))
       view_after = inspect(Root.view(state_after))
@@ -187,28 +197,41 @@ defmodule TermuiIntegrationTest do
   end
 
   describe "layout structure" do
-    test "view creates bordered layout" do
-      state = %{view: :welcome, quit_requested: false}
+    test "view creates VStack layout with four sections" do
+      state = Root.init([])
       view_spec = Root.view(state)
 
       view_string = inspect(view_spec)
 
-      # Verify it uses Block widget (bordered container)
-      assert view_string =~ "Block"
+      # Verify it uses VStack for vertical layout
+      assert view_string =~ "VStack"
 
-      # Verify it has Label widget for content
-      assert view_string =~ "Label"
+      # Verify it uses Block widgets (bordered containers)
+      assert view_string =~ "Block"
     end
 
-    test "view includes keyboard shortcut hint" do
-      state = %{view: :welcome, quit_requested: false}
+    test "view includes keyboard shortcut hints in status bar" do
+      state = Root.init([])
       view_spec = Root.view(state)
 
       view_string = inspect(view_spec)
 
-      # Verify keyboard hint content
-      assert view_string =~ "'Q'"
-      assert view_string =~ "quit"
+      # Verify keyboard hint content in status bar
+      assert view_string =~ "Tab"
+      assert view_string =~ "Switch Focus"
+      assert view_string =~ "Quit"
+    end
+
+    test "view uses SplitPane for sidebar and content" do
+      state = Root.init([])
+      view_spec = Root.view(state)
+
+      view_string = inspect(view_spec)
+
+      # Verify SplitPane is used
+      assert view_string =~ "SplitPane"
+      assert view_string =~ "Resources"
+      assert view_string =~ "Content"
     end
   end
 end

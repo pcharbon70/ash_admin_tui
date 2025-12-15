@@ -10,47 +10,47 @@ By the end of Phase 2, users will be able to navigate through mock domain/resour
 
 ## 2.1 Layout Manager Component
 
-- [ ] **Section 2.1 Complete**
+- [x] **Section 2.1 Complete**
 
 The layout manager orchestrates the physical screen layout, dividing the terminal into regions for different UI components. It uses TermUI's SplitPane widget to create a responsive layout that adapts to terminal size while maintaining proper proportions and minimum dimensions.
 
 ### 2.1.1 Implement Layout Component
 
-- [ ] **Task 2.1.1 Complete**
+- [x] **Task 2.1.1 Complete**
 
 Create the layout component that renders the four-section interface structure and manages responsive sizing.
 
-- [ ] 2.1.1.1 Create lib/ash_admin_tui/components/layout.ex module
-- [ ] 2.1.1.2 Define layout state: `%{terminal_size: {width, height}, focus: :sidebar | :content}`
-- [ ] 2.1.1.3 Implement view/1 with vertical stack containing top bar, split pane, and status bar
-- [ ] 2.1.1.4 Configure top bar with fixed height of 2 lines
-- [ ] 2.1.1.5 Configure split pane with sidebar at 25% width (minimum 30 characters)
-- [ ] 2.1.1.6 Configure status bar with fixed height of 1 line
-- [ ] 2.1.1.7 Add resize event handling to update terminal_size in state
+- [x] 2.1.1.1 Create lib/ash_admin_tui/components/layout.ex module
+- [x] 2.1.1.2 Define layout state: `%{terminal_size: {width, height}, focus: :sidebar | :content}`
+- [x] 2.1.1.3 Implement view/1 with vertical stack containing top bar, split pane, and status bar
+- [x] 2.1.1.4 Configure top bar with fixed height of 2 lines
+- [x] 2.1.1.5 Configure split pane with sidebar at 25% width (minimum 30 characters)
+- [x] 2.1.1.6 Configure status bar with fixed height of 1 line
+- [x] 2.1.1.7 Add resize event handling to update terminal_size in state
 
 ### 2.1.2 Implement Focus Management
 
-- [ ] **Task 2.1.2 Complete**
+- [x] **Task 2.1.2 Complete**
 
 Build focus management system that tracks which component has keyboard focus and provides visual feedback.
 
-- [ ] 2.1.2.1 Add focus state to layout: `:sidebar` or `:content`
-- [ ] 2.1.2.2 Implement Tab key handling to toggle focus between sidebar and content
-- [ ] 2.1.2.3 Apply focus styling (highlighted border) to active component
-- [ ] 2.1.2.4 Route keyboard events to focused component
-- [ ] 2.1.2.5 Implement focus indicator in status bar showing current focus
+- [x] 2.1.2.1 Add focus state to layout: `:sidebar` or `:content`
+- [x] 2.1.2.2 Implement Tab key handling to toggle focus between sidebar and content
+- [x] 2.1.2.3 Apply focus styling (highlighted border) to active component
+- [x] 2.1.2.4 Route keyboard events to focused component
+- [x] 2.1.2.5 Implement focus indicator in status bar showing current focus
 
 ### 2.1.3 Unit Tests - Section 2.1
 
-- [ ] **Unit Tests 2.1 Complete**
+- [x] **Unit Tests 2.1 Complete**
 
-- [ ] Test Layout component initializes with correct structure
-- [ ] Test layout has four sections (top bar, sidebar, content, status bar)
-- [ ] Test sidebar takes 25% width with 30 char minimum
-- [ ] Test Tab key toggles focus between sidebar and content
-- [ ] Test focused component has highlighted border
-- [ ] Test resize events update terminal_size in state
-- [ ] Test keyboard events route to focused component
+- [x] Test Layout component initializes with correct structure
+- [x] Test layout has four sections (top bar, sidebar, content, status bar)
+- [x] Test sidebar takes 25% width with 30 char minimum
+- [x] Test Tab key toggles focus between sidebar and content
+- [x] Test focused component has highlighted border
+- [x] Test resize events update terminal_size in state
+- [x] Test keyboard events route to focused component
 
 ## 2.2 Top Bar Component
 
