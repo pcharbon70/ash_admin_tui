@@ -9,7 +9,7 @@ defmodule DependenciesTest do
       # Get all dependencies from mix.exs
       deps = Mix.Project.config()[:deps]
       assert is_list(deps)
-      assert length(deps) > 0
+      refute Enum.empty?(deps)
     end
 
     test "mix.exs defines all required dependencies" do

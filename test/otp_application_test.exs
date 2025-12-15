@@ -21,7 +21,7 @@ defmodule OtpApplicationTest do
       # - Each child process is independent
       # - If one child crashes, only that child is restarted
       # We can verify this indirectly by checking that multiple children can run independently
-      assert length(children) >= 1
+      refute Enum.empty?(children)
     end
   end
 
