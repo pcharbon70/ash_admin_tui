@@ -52,18 +52,23 @@ defmodule AshAdminTui.UI.Runtime do
   def init(_opts) do
     Logger.info("Starting AshAdmin TUI Runtime...")
 
-    # For now, we'll initialize with a simple state
-    # The actual TermUI.Runtime integration will be added in Section 1.4
-    # when we implement the root component
-    state = %{
-      runtime_pid: nil,
-      root_component: nil,
-      started_at: DateTime.utc_now()
-    }
+    # Start TermUI.Runtime with the Root component
+    case TermUI.Runtime.start_link(root: AshAdminTui.UI.Root) do
+      {:ok, runtime_pid} ->
+        Logger.info("AshAdmin TUI Runtime initialized successfully")
 
-    Logger.info("AshAdmin TUI Runtime initialized (TermUI integration pending)")
+        state = %{
+          runtime_pid: runtime_pid,
+          root_component: AshAdminTui.UI.Root,
+          started_at: DateTime.utc_now()
+        }
 
-    {:ok, state}
+        {:ok, state}
+
+      {:error, reason} ->
+        Logger.error("Failed to start TermUI.Runtime: #{inspect(reason)}")
+        {:stop, {:termui_start_failed, reason}}
+    end
   end
 
   @impl true
@@ -84,10 +89,12 @@ defmodule AshAdminTui.UI.Runtime do
   def terminate(reason, state) do
     Logger.info("Shutting down AshAdmin TUI Runtime: #{inspect(reason)}")
 
-    # Graceful TermUI shutdown will be implemented in Section 1.4
-    # For now, we just log the shutdown
-    if state.runtime_pid do
-      Logger.debug("Stopping TermUI runtime process: #{inspect(state.runtime_pid)}")
+    # The TermUI runtime is linked to this process via start_link, so it will
+    # automatically terminate when this process terminates. We don't need to
+    # explicitly stop it, and doing so can cause race conditions with its own
+    # cleanup logic.
+    if state.runtime_pid && Process.alive?(state.runtime_pid) do
+      Logger.debug("TermUI runtime process #{inspect(state.runtime_pid)} will terminate via link")
     end
 
     :ok
