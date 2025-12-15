@@ -36,7 +36,20 @@ defmodule AshAdminTui.MixProject do
   defp elixirc_paths(_), do: ["lib"]
 
   defp deps do
-    []
+    [
+      # Core dependencies
+      {:term_ui, "~> 0.2.0"},
+      {:ash, "~> 3.0"},
+      {:ash_admin, "~> 0.11"},
+      {:jason, "~> 1.4"},
+
+      # Development dependencies
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.31", only: :dev, runtime: false},
+      {:mimic, "~> 1.7", only: :test},
+      {:excoveralls, "~> 0.18", only: :test}
+    ]
   end
 
   defp description do
