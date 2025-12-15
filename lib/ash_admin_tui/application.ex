@@ -6,8 +6,8 @@ defmodule AshAdminTui.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # The TermUI runtime will be added in a later task (1.3.2)
-      # {AshAdminTui.UI.Runtime, []}
+      # TermUI Runtime GenServer with permanent restart strategy
+      {AshAdminTui.UI.Runtime, []}
     ]
 
     opts = [strategy: :one_for_one, name: AshAdminTui.Supervisor]
