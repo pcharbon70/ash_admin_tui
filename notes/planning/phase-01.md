@@ -81,45 +81,45 @@ Configure development and test dependencies per CLAUDE.md standards. These tools
 
 ## 1.3 OTP Application Structure
 
-- [ ] **Section 1.3 Complete**
+- [x] **Section 1.3 Complete**
 
 The OTP application structure provides process supervision and lifecycle management for the TUI. The supervision tree ensures the TermUI runtime process is monitored and restarted on failure. Wrapping TermUI.Runtime in a GenServer allows integration with OTP supervision while maintaining the Elm Architecture pattern.
 
 ### 1.3.1 Implement Application Module
 
-- [ ] **Task 1.3.1 Complete**
+- [x] **Task 1.3.1 Complete**
 
 Create the OTP application entry point that defines the supervision tree. This module is called when the application starts and establishes the top-level supervisor.
 
-- [ ] 1.3.1.1 Implement `AshAdminTui.Application.start/2` callback
-- [ ] 1.3.1.2 Define supervision tree with `:one_for_one` strategy
-- [ ] 1.3.1.3 Add `AshAdminTui.UI.Runtime` as supervised child with `:permanent` restart
-- [ ] 1.3.1.4 Configure application in mix.exs with `mod: {AshAdminTui.Application, []}`
-- [ ] 1.3.1.5 Add application description and extra_applications (logger)
+- [x] 1.3.1.1 Implement `AshAdminTui.Application.start/2` callback
+- [x] 1.3.1.2 Define supervision tree with `:one_for_one` strategy
+- [x] 1.3.1.3 Add `AshAdminTui.UI.Runtime` as supervised child with `:permanent` restart
+- [x] 1.3.1.4 Configure application in mix.exs with `mod: {AshAdminTui.Application, []}`
+- [x] 1.3.1.5 Add application description and extra_applications (logger)
 
 ### 1.3.2 Create TermUI Runtime Wrapper
 
-- [ ] **Task 1.3.2 Complete**
+- [x] **Task 1.3.2 Complete**
 
 Build a GenServer that wraps TermUI.Runtime, providing OTP supervision integration and lifecycle management. This wrapper handles startup, shutdown, and crash recovery.
 
-- [ ] 1.3.2.1 Create lib/ash_admin_tui/ui/runtime.ex module
-- [ ] 1.3.2.2 Implement GenServer with `use GenServer` and standard callbacks
-- [ ] 1.3.2.3 In init/1, start TermUI.Runtime with root component reference
-- [ ] 1.3.2.4 Implement handle_info callbacks for TermUI messages
-- [ ] 1.3.2.5 Implement terminate/2 for graceful TermUI shutdown
-- [ ] 1.3.2.6 Add child_spec with unique :id and restart strategy
+- [x] 1.3.2.1 Create lib/ash_admin_tui/ui/runtime.ex module
+- [x] 1.3.2.2 Implement GenServer with `use GenServer` and standard callbacks
+- [x] 1.3.2.3 In init/1, start TermUI.Runtime with root component reference
+- [x] 1.3.2.4 Implement handle_info callbacks for TermUI messages
+- [x] 1.3.2.5 Implement terminate/2 for graceful TermUI shutdown
+- [x] 1.3.2.6 Add child_spec with unique :id and restart strategy
 
 ### 1.3.3 Unit Tests - Section 1.3
 
-- [ ] **Unit Tests 1.3 Complete**
+- [x] **Unit Tests 1.3 Complete**
 
-- [ ] Test Application.start/2 returns supervision tree
-- [ ] Test supervision tree includes Runtime as child
-- [ ] Test Runtime GenServer starts successfully
-- [ ] Test Runtime GenServer is supervised with :permanent restart
-- [ ] Test Runtime GenServer terminates gracefully on shutdown
-- [ ] Test Runtime GenServer restarts on crash
+- [x] Test Application.start/2 returns supervision tree
+- [x] Test supervision tree includes Runtime as child
+- [x] Test Runtime GenServer starts successfully
+- [x] Test Runtime GenServer is supervised with :permanent restart
+- [x] Test Runtime GenServer terminates gracefully on shutdown
+- [x] Test Runtime GenServer restarts on crash
 
 ## 1.4 TermUI Integration
 
