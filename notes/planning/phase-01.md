@@ -39,45 +39,45 @@ Initialize the Elixir Mix project with appropriate metadata and directory struct
 
 ## 1.2 Dependency Management
 
-- [ ] **Section 1.2 Complete**
+- [x] **Section 1.2 Complete**
 
 Proper dependency management ensures the project has access to all required libraries with compatible versions. TermUI provides the UI framework, Ash and AshAdmin enable resource integration, and development tools maintain code quality. Version constraints prevent breaking changes from upstream dependencies.
 
 ### 1.2.1 Add Core Dependencies
 
-- [ ] **Task 1.2.1 Complete**
+- [x] **Task 1.2.1 Complete**
 
 Configure mix.exs with production dependencies needed for the TUI functionality. TermUI is the primary UI framework, while Ash ecosystem packages enable admin functionality.
 
-- [ ] 1.2.1.1 Add `{:term_ui, "~> 0.2.0"}` to deps for terminal UI framework
-- [ ] 1.2.1.2 Add `{:ash, "~> 3.0"}` to deps for Ash framework integration
-- [ ] 1.2.1.3 Add `{:ash_admin, "~> 0.11"}` to deps for AshAdmin DSL configuration reuse
-- [ ] 1.2.1.4 Add `{:jason, "~> 1.4"}` to deps for JSON encoding/decoding
-- [ ] 1.2.1.5 Run `mix deps.get` to fetch dependencies
-- [ ] 1.2.1.6 Run `mix deps.compile` to compile dependencies
+- [x] 1.2.1.1 Add `{:term_ui, "~> 0.2.0"}` to deps for terminal UI framework
+- [x] 1.2.1.2 Add `{:ash, "~> 3.0"}` to deps for Ash framework integration
+- [x] 1.2.1.3 Add `{:ash_admin, "~> 0.11"}` to deps for AshAdmin DSL configuration reuse
+- [x] 1.2.1.4 Add `{:jason, "~> 1.4"}` to deps for JSON encoding/decoding
+- [x] 1.2.1.5 Run `mix deps.get` to fetch dependencies
+- [x] 1.2.1.6 Run `mix deps.compile` to compile dependencies
 
 ### 1.2.2 Add Development Dependencies
 
-- [ ] **Task 1.2.2 Complete**
+- [x] **Task 1.2.2 Complete**
 
 Configure development and test dependencies per CLAUDE.md standards. These tools enforce code quality and enable comprehensive testing.
 
-- [ ] 1.2.2.1 Add `{:credo, "~> 1.7", only: [:dev, :test], runtime: false}` for code analysis
-- [ ] 1.2.2.2 Add `{:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}` for type checking
-- [ ] 1.2.2.3 Add `{:ex_doc, "~> 0.31", only: :dev, runtime: false}` for documentation
-- [ ] 1.2.2.4 Add `{:mimic, "~> 1.7", only: :test}` for test mocking (per CLAUDE.md: use expect not stub)
-- [ ] 1.2.2.5 Add `{:excoveralls, "~> 0.18", only: :test}` for test coverage reporting
-- [ ] 1.2.2.6 Run `mix deps.get` to fetch development dependencies
+- [x] 1.2.2.1 Add `{:credo, "~> 1.7", only: [:dev, :test], runtime: false}` for code analysis
+- [x] 1.2.2.2 Add `{:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}` for type checking
+- [x] 1.2.2.3 Add `{:ex_doc, "~> 0.31", only: :dev, runtime: false}` for documentation
+- [x] 1.2.2.4 Add `{:mimic, "~> 1.7", only: :test}` for test mocking (per CLAUDE.md: use expect not stub)
+- [x] 1.2.2.5 Add `{:excoveralls, "~> 0.18", only: :test}` for test coverage reporting
+- [x] 1.2.2.6 Run `mix deps.get` to fetch development dependencies
 
 ### 1.2.3 Unit Tests - Section 1.2
 
-- [ ] **Unit Tests 1.2 Complete**
+- [x] **Unit Tests 1.2 Complete**
 
-- [ ] Test all dependencies resolve without conflicts
-- [ ] Test mix compile succeeds with all dependencies
-- [ ] Test TermUI is available and can be referenced
-- [ ] Test Ash and AshAdmin modules are accessible
-- [ ] Test development tools (Credo, Dialyzer) are available in dev environment
+- [x] Test all dependencies resolve without conflicts
+- [x] Test mix compile succeeds with all dependencies
+- [x] Test TermUI is available and can be referenced
+- [x] Test Ash and AshAdmin modules are accessible
+- [x] Test development tools (Credo, Dialyzer) are available in dev environment
 
 ## 1.3 OTP Application Structure
 
