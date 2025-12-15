@@ -161,7 +161,7 @@ end
 ### Prerequisites
 
 - Elixir 1.14+
-- Erlang/OTP 25+
+- Erlang/OTP 28+ (required for TUI functionality)
 - Terminal with UTF-8 support
 
 ### Getting Started

@@ -54,6 +54,17 @@ defmodule Mix.Tasks.AshAdmin.Tui do
     # Keep the task running indefinitely
     # The application will handle its own shutdown via the :stop command
     # from the Root component when the user presses 'Q'
+    #
+    # NOTE: This task is not covered by automated tests because:
+    # 1. Process.sleep(:infinity) makes the task non-terminating
+    # 2. Testing requires spawning in a separate process and killing it
+    # 3. The task is simple enough to be verified manually
+    # 4. The underlying components (Application, Runtime, Root) are fully tested
+    #
+    # Manual testing: Run `mix ash_admin.tui` and verify:
+    # - Application starts without errors
+    # - Welcome screen is displayed
+    # - Pressing 'Q' quits gracefully
     Process.sleep(:infinity)
   end
 end

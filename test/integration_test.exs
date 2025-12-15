@@ -8,8 +8,8 @@ defmodule IntegrationTest do
   ensuring the complete system behaves as expected from end-to-end.
   """
 
-  alias AshAdminTui.UI.Root
   alias AshAdminTui.Config
+  alias AshAdminTui.UI.Root
 
   describe "Application Startup (1.7.1)" do
     test "application is already started by test suite" do

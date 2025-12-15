@@ -5,6 +5,9 @@ defmodule AshAdminTui.MixProject do
   @source_url "https://github.com/yourusername/ash_admin_tui"
 
   def project do
+    # Verify OTP version meets minimum requirement for TUI functionality
+    verify_otp_version()
+
     [
       app: :ash_admin_tui,
       version: @version,
@@ -16,14 +19,33 @@ defmodule AshAdminTui.MixProject do
       docs: docs(),
       elixirc_paths: elixirc_paths(Mix.env()),
       test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [
+      dialyzer: dialyzer()
+    ]
+  end
+
+  def cli do
+    [
+      preferred_envs: [
         coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test
-      ],
-      dialyzer: dialyzer()
+      ]
     ]
+  end
+
+  defp verify_otp_version do
+    otp_release = String.to_integer(System.otp_release())
+    minimum_otp = 28
+
+    if otp_release < minimum_otp do
+      Mix.raise("""
+      AshAdmin TUI requires Erlang/OTP #{minimum_otp} or later.
+      You are currently running OTP #{otp_release}.
+
+      Please upgrade your Erlang/OTP installation to version #{minimum_otp} or later.
+      """)
+    end
   end
 
   def application do

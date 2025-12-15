@@ -143,7 +143,14 @@ defmodule AshAdminTui.Config do
   end
 
   defp parse_env_value(:theme, value) do
-    String.to_atom(value)
+    # Use String.to_existing_atom/1 to prevent atom table exhaustion
+    # Only convert if the atom already exists in the system
+    String.to_existing_atom(value)
+  rescue
+    ArgumentError ->
+      # If atom doesn't exist, return nil to use default theme
+      # This prevents malicious or accidental creation of arbitrary atoms
+      nil
   end
 
   defp parse_env_value(_key, value) do

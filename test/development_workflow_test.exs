@@ -133,13 +133,15 @@ defmodule DevelopmentWorkflowTest do
     end
 
     test "Coverage CLI environments are configured" do
-      config = Mix.Project.config()
+      # In Elixir 1.19+, preferred_cli_env moved from project/0 to cli/0
+      # This prevents deprecation warnings
+      cli_config = AshAdminTui.MixProject.cli()
 
       # Verify coverage commands use :test environment
-      preferred_cli_env = config[:preferred_cli_env]
-      assert preferred_cli_env[:coveralls] == :test
-      assert preferred_cli_env[:"coveralls.detail"] == :test
-      assert preferred_cli_env[:"coveralls.html"] == :test
+      preferred_envs = cli_config[:preferred_envs]
+      assert preferred_envs[:coveralls] == :test
+      assert preferred_envs[:"coveralls.detail"] == :test
+      assert preferred_envs[:"coveralls.html"] == :test
     end
 
     test "Mimic dependency is available in test environment" do

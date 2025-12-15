@@ -73,8 +73,9 @@ defmodule AshAdminTui.UI.Runtime do
 
   @impl true
   def handle_info({:term_ui, _msg} = message, state) do
-    # Forward TermUI messages to the runtime
-    # This will be fully implemented in Section 1.4
+    # TermUI messages are handled directly by the TermUI.Runtime process
+    # This GenServer wrapper receives these messages for monitoring and logging
+    # Future phases may add custom message handling for specific events
     Logger.debug("Received TermUI message: #{inspect(message)}")
     {:noreply, state}
   end
