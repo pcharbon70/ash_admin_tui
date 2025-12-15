@@ -166,44 +166,44 @@ Build the basic layout using TermUI widgets. This establishes the visual structu
 
 ## 1.5 Configuration System
 
-- [ ] **Section 1.5 Complete**
+- [x] **Section 1.5 Complete**
 
 The configuration system allows customization of TUI behavior through config files and environment variables. This includes API endpoints, UI preferences, logging levels, and session management. Configuration validation prevents runtime errors from invalid settings.
 
 ### 1.5.1 Implement Configuration Module
 
-- [ ] **Task 1.5.1 Complete**
+- [x] **Task 1.5.1 Complete**
 
 Create a configuration management module that reads, validates, and provides access to application settings.
 
-- [ ] 1.5.1.1 Create lib/ash_admin_tui/config.ex module
-- [ ] 1.5.1.2 Implement get/2 function to retrieve config values with defaults
-- [ ] 1.5.1.3 Implement validate/0 function to check required config values
-- [ ] 1.5.1.4 Add support for environment variable overrides (ASH_ADMIN_* prefix)
-- [ ] 1.5.1.5 Create helper functions for common config: api_url/0, log_level/0, theme/0
+- [x] 1.5.1.1 Create lib/ash_admin_tui/config.ex module
+- [x] 1.5.1.2 Implement get/2 function to retrieve config values with defaults
+- [x] 1.5.1.3 Implement validate/0 function to check required config values
+- [x] 1.5.1.4 Add support for environment variable overrides (ASH_ADMIN_* prefix)
+- [x] 1.5.1.5 Create helper functions for common config: api_url/0, log_level/0, theme/0
 
 ### 1.5.2 Create Configuration Files
 
-- [ ] **Task 1.5.2 Complete**
+- [x] **Task 1.5.2 Complete**
 
 Define configuration files for different environments (dev, test, prod) following Elixir conventions.
 
-- [ ] 1.5.2.1 Create config/config.exs with default settings
-- [ ] 1.5.2.2 Configure logger with level :info, format options, and metadata
-- [ ] 1.5.2.3 Create config/dev.exs with development overrides
-- [ ] 1.5.2.4 Create config/test.exs with test environment settings (logger level :warning)
-- [ ] 1.5.2.5 Create config/runtime.exs for runtime configuration (API URL from env vars)
-- [ ] 1.5.2.6 Add config imports to config.exs for environment-specific files
+- [x] 1.5.2.1 Create config/config.exs with default settings
+- [x] 1.5.2.2 Configure logger with level :info
+- [x] 1.5.2.3 Create config/dev.exs with development overrides
+- [x] 1.5.2.4 Create config/test.exs with test environment settings (logger level :warning)
+- [x] 1.5.2.5 Create config/runtime.exs for runtime configuration (API URL from env vars)
+- [x] 1.5.2.6 Add config imports to config.exs for environment-specific files
 
 ### 1.5.3 Unit Tests - Section 1.5
 
-- [ ] **Unit Tests 1.5 Complete**
+- [x] **Unit Tests 1.5 Complete**
 
-- [ ] Test Config.get/2 retrieves configured values
-- [ ] Test Config.get/2 returns default when key missing
-- [ ] Test Config.validate/0 succeeds with valid configuration
-- [ ] Test environment variable overrides work correctly
-- [ ] Test helper functions (api_url/0, log_level/0) return expected values
+- [x] Test Config.get/2 retrieves configured values
+- [x] Test Config.get/2 returns default when key missing
+- [x] Test Config.validate/0 succeeds with valid configuration
+- [x] Test environment variable overrides work correctly
+- [x] Test helper functions (api_url/0, log_level/0, theme/0) return expected values
 
 ## 1.6 Development Workflow
 
