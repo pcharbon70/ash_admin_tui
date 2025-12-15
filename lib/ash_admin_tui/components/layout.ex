@@ -36,22 +36,32 @@ defmodule AshAdminTui.Components.Layout do
 
   alias TermUI.Event
   alias TermUI.Widget.{Block, Label, SplitPane, VStack}
+  alias AshAdminTui.Components.TopBar
 
   @doc """
   Initializes the layout component state.
 
-  Returns initial state with default terminal size and sidebar focus.
+  Returns initial state with default terminal size, sidebar focus, and mock session data.
 
   ## Examples
 
-      iex> AshAdminTui.Components.Layout.init([])
-      %{terminal_size: {80, 24}, focus: :sidebar}
+      iex> state = AshAdminTui.Components.Layout.init([])
+      iex> state.terminal_size
+      {80, 24}
+      iex> state.focus
+      :sidebar
+      iex> state.navigation
+      %{domain: "Home", resource: nil, record_id: nil}
   """
   @spec init(keyword()) :: map()
   def init(_opts) do
     %{
       terminal_size: {80, 24},
-      focus: :sidebar
+      focus: :sidebar,
+      # Session state (mock data for Phase 2)
+      navigation: %{domain: "Home", resource: nil, record_id: nil},
+      actor: nil,
+      tenant: nil
     }
   end
 
@@ -147,17 +157,20 @@ defmodule AshAdminTui.Components.Layout do
 
   # Private helper functions
 
-  defp render_top_bar(_state, _width, height) do
+  defp render_top_bar(state, width, height) do
+    # Prepare session state for TopBar component
+    top_bar_state = %{
+      navigation: state.navigation,
+      actor: state.actor,
+      tenant: state.tenant,
+      width: width - 4  # Account for border padding
+    }
+
     {Block, %{
-      title: "AshAdmin TUI",
-      title_align: :center,
       border: :single,
       height: height
     }, [
-      {Label, %{
-        text: "Context Info Here",
-        align: :center
-      }}
+      TopBar.view(top_bar_state)
     ]}
   end
 

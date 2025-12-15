@@ -54,48 +54,48 @@ Build focus management system that tracks which component has keyboard focus and
 
 ## 2.2 Top Bar Component
 
-- [ ] **Section 2.2 Complete**
+- [x] **Section 2.2 Complete**
 
 The top bar displays contextual information about the current session, including application title, navigation breadcrumbs, actor context, and tenant context. It provides at-a-glance awareness of the authorization context.
 
 ### 2.2.1 Implement Top Bar Rendering
 
-- [ ] **Task 2.2.1 Complete**
+- [x] **Task 2.2.1 Complete**
 
 Create the top bar component with title and context information display.
 
-- [ ] 2.2.1.1 Create lib/ash_admin_tui/components/top_bar.ex module
-- [ ] 2.2.1.2 Implement view/1 taking session state as input
-- [ ] 2.2.1.3 Render line 1: application title on left, actor info on right
-- [ ] 2.2.1.4 Render line 2: breadcrumb navigation on left, tenant info on right
-- [ ] 2.2.1.5 Format actor display as "Actor: <name> <role>"
-- [ ] 2.2.1.6 Format tenant display as "Tenant: <name>"
-- [ ] 2.2.1.7 Add keyboard shortcut hints ([I] for impersonation, [T] for tenant)
+- [x] 2.2.1.1 Create lib/ash_admin_tui/components/top_bar.ex module
+- [x] 2.2.1.2 Implement view/1 taking session state as input
+- [x] 2.2.1.3 Render line 1: application title on left, actor info on right
+- [x] 2.2.1.4 Render line 2: breadcrumb navigation on left, tenant info on right
+- [x] 2.2.1.5 Format actor display as "Actor: <name> <role>"
+- [x] 2.2.1.6 Format tenant display as "Tenant: <name>"
+- [x] 2.2.1.7 Add keyboard shortcut hints ([I] for impersonation, [T] for tenant)
 
 ### 2.2.2 Implement Breadcrumb Navigation
 
-- [ ] **Task 2.2.2 Complete**
+- [x] **Task 2.2.2 Complete**
 
 Build breadcrumb display showing current navigation path (Domain › Resource › Record ID).
 
-- [ ] 2.2.2.1 Accept navigation state from parent component
-- [ ] 2.2.2.2 Format breadcrumb as "Domain › Resource" for list view
-- [ ] 2.2.2.3 Format breadcrumb as "Domain › Resource › #ID" for detail view
-- [ ] 2.2.2.4 Truncate long names with ellipsis if width constrained
-- [ ] 2.2.2.5 Apply styling to breadcrumb (dimmed or secondary color)
+- [x] 2.2.2.1 Accept navigation state from parent component
+- [x] 2.2.2.2 Format breadcrumb as "Domain › Resource" for list view
+- [x] 2.2.2.3 Format breadcrumb as "Domain › Resource › #ID" for detail view
+- [x] 2.2.2.4 Truncate long names with ellipsis if width constrained
+- [x] 2.2.2.5 Apply styling to breadcrumb (dimmed or secondary color)
 
 ### 2.2.3 Unit Tests - Section 2.2
 
-- [ ] **Unit Tests 2.2 Complete**
+- [x] **Unit Tests 2.2 Complete**
 
-- [ ] Test TopBar.view/1 renders two-line layout
-- [ ] Test line 1 contains application title and actor info
-- [ ] Test line 2 contains breadcrumb and tenant info
-- [ ] Test actor display formats correctly
-- [ ] Test tenant display formats correctly
-- [ ] Test breadcrumb shows domain and resource
-- [ ] Test breadcrumb includes record ID in detail view
-- [ ] Test long names truncate with ellipsis
+- [x] Test TopBar.view/1 renders two-line layout
+- [x] Test line 1 contains application title and actor info
+- [x] Test line 2 contains breadcrumb and tenant info
+- [x] Test actor display formats correctly
+- [x] Test tenant display formats correctly
+- [x] Test breadcrumb shows domain and resource
+- [x] Test breadcrumb includes record ID in detail view
+- [x] Test long names truncate with ellipsis
 
 ## 2.3 Status Bar Component
 

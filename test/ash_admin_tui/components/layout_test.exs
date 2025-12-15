@@ -6,32 +6,49 @@ defmodule AshAdminTui.Components.LayoutTest do
   alias TermUI.Event
   alias TermUI.Widget.{VStack, SplitPane, Block}
 
+  # Helper function to create minimal valid state for testing
+  defp minimal_state(overrides \\ %{}) do
+    Map.merge(
+      %{
+        terminal_size: {80, 24},
+        focus: :sidebar,
+        navigation: %{domain: "Home", resource: nil, record_id: nil},
+        actor: nil,
+        tenant: nil
+      },
+      overrides
+    )
+  end
+
   describe "init/1" do
     test "initializes with correct default state" do
       state = Layout.init([])
 
       assert state.terminal_size == {80, 24}
       assert state.focus == :sidebar
+      assert state.navigation == %{domain: "Home", resource: nil, record_id: nil}
+      assert state.actor == nil
+      assert state.tenant == nil
     end
   end
 
   describe "event_to_msg/2" do
     test "Tab key generates :toggle_focus message" do
-      state = %{terminal_size: {80, 24}, focus: :sidebar}
+      state = minimal_state()
       event = %Event.Key{key: :char, char: "\t"}
 
       assert Layout.event_to_msg(event, state) == {:msg, :toggle_focus}
     end
 
     test "Resize event generates {:resize, {width, height}} message" do
-      state = %{terminal_size: {80, 24}, focus: :sidebar}
+      state = minimal_state()
       event = %Event.Resize{width: 100, height: 30}
 
       assert Layout.event_to_msg(event, state) == {:msg, {:resize, {100, 30}}}
     end
 
     test "other events are ignored" do
-      state = %{terminal_size: {80, 24}, focus: :sidebar}
+      state = minimal_state()
       event = %Event.Key{key: :char, char: "a"}
 
       assert Layout.event_to_msg(event, state) == :ignore
@@ -40,7 +57,7 @@ defmodule AshAdminTui.Components.LayoutTest do
 
   describe "update/2" do
     test ":toggle_focus switches from sidebar to content" do
-      state = %{terminal_size: {80, 24}, focus: :sidebar}
+      state = minimal_state()
 
       {new_state, commands} = Layout.update(:toggle_focus, state)
 
@@ -49,7 +66,7 @@ defmodule AshAdminTui.Components.LayoutTest do
     end
 
     test ":toggle_focus switches from content to sidebar" do
-      state = %{terminal_size: {80, 24}, focus: :content}
+      state = minimal_state(%{focus: :content})
 
       {new_state, commands} = Layout.update(:toggle_focus, state)
 
@@ -58,7 +75,7 @@ defmodule AshAdminTui.Components.LayoutTest do
     end
 
     test "{:resize, {width, height}} updates terminal_size" do
-      state = %{terminal_size: {80, 24}, focus: :sidebar}
+      state = minimal_state()
 
       {new_state, commands} = Layout.update({:resize, {100, 30}}, state)
 
@@ -68,7 +85,7 @@ defmodule AshAdminTui.Components.LayoutTest do
     end
 
     test "unknown messages return unchanged state" do
-      state = %{terminal_size: {80, 24}, focus: :sidebar}
+      state = minimal_state()
 
       {new_state, commands} = Layout.update(:unknown, state)
 
@@ -79,7 +96,7 @@ defmodule AshAdminTui.Components.LayoutTest do
 
   describe "view/1" do
     test "renders layout with four sections in VStack" do
-      state = %{terminal_size: {80, 24}, focus: :sidebar}
+      state = minimal_state()
 
       {widget, _props, children} = Layout.view(state)
 
@@ -88,7 +105,7 @@ defmodule AshAdminTui.Components.LayoutTest do
     end
 
     test "layout has fixed-height top bar (2 lines)" do
-      state = %{terminal_size: {80, 24}, focus: :sidebar}
+      state = minimal_state()
 
       {VStack, _props, [top_bar | _rest]} = Layout.view(state)
       {Block, top_bar_props, _children} = top_bar
@@ -97,7 +114,7 @@ defmodule AshAdminTui.Components.LayoutTest do
     end
 
     test "layout has fixed-height status bar (1 line)" do
-      state = %{terminal_size: {80, 24}, focus: :sidebar}
+      state = minimal_state()
 
       {VStack, _props, children} = Layout.view(state)
       status_bar = List.last(children)
@@ -107,7 +124,7 @@ defmodule AshAdminTui.Components.LayoutTest do
     end
 
     test "layout contains split pane with sidebar and content" do
-      state = %{terminal_size: {80, 24}, focus: :sidebar}
+      state = minimal_state()
 
       {VStack, _props, [_top_bar, split_pane | _rest]} = Layout.view(state)
       {SplitPane, split_props, pane_children} = split_pane
@@ -118,7 +135,7 @@ defmodule AshAdminTui.Components.LayoutTest do
 
     test "sidebar takes 25% width of terminal when above minimum" do
       # Use a large terminal where 25% exceeds 30 chars
-      state = %{terminal_size: {200, 24}, focus: :sidebar}
+      state = minimal_state(%{terminal_size: {200, 24}})
 
       {VStack, _props, [_top_bar, split_pane | _rest]} = Layout.view(state)
       {SplitPane, split_props, _children} = split_pane
@@ -129,7 +146,7 @@ defmodule AshAdminTui.Components.LayoutTest do
 
     test "sidebar respects minimum width of 30 characters" do
       # Small terminal where 25% would be less than 30
-      state = %{terminal_size: {80, 24}, focus: :sidebar}
+      state = minimal_state()
 
       {VStack, _props, [_top_bar, split_pane | _rest]} = Layout.view(state)
       {SplitPane, split_props, _children} = split_pane
@@ -139,7 +156,7 @@ defmodule AshAdminTui.Components.LayoutTest do
     end
 
     test "focused component (sidebar) has double border" do
-      state = %{terminal_size: {80, 24}, focus: :sidebar}
+      state = minimal_state()
 
       {VStack, _props, [_top_bar, split_pane | _rest]} = Layout.view(state)
       {SplitPane, _split_props, [sidebar | _content]} = split_pane
@@ -150,7 +167,7 @@ defmodule AshAdminTui.Components.LayoutTest do
     end
 
     test "unfocused component (content) has single border" do
-      state = %{terminal_size: {80, 24}, focus: :sidebar}
+      state = minimal_state()
 
       {VStack, _props, [_top_bar, split_pane | _rest]} = Layout.view(state)
       {SplitPane, _split_props, [_sidebar, content]} = split_pane
@@ -161,7 +178,7 @@ defmodule AshAdminTui.Components.LayoutTest do
     end
 
     test "focused component (content) has double border" do
-      state = %{terminal_size: {80, 24}, focus: :content}
+      state = minimal_state(%{focus: :content})
 
       {VStack, _props, [_top_bar, split_pane | _rest]} = Layout.view(state)
       {SplitPane, _split_props, [_sidebar, content]} = split_pane
@@ -172,7 +189,7 @@ defmodule AshAdminTui.Components.LayoutTest do
     end
 
     test "unfocused component (sidebar) has single border" do
-      state = %{terminal_size: {80, 24}, focus: :content}
+      state = minimal_state(%{focus: :content})
 
       {VStack, _props, [_top_bar, split_pane | _rest]} = Layout.view(state)
       {SplitPane, _split_props, [sidebar | _content]} = split_pane
@@ -183,7 +200,7 @@ defmodule AshAdminTui.Components.LayoutTest do
     end
 
     test "content height accounts for fixed top and status bars" do
-      state = %{terminal_size: {80, 24}, focus: :sidebar}
+      state = minimal_state()
 
       {VStack, _props, [_top_bar, split_pane | _rest]} = Layout.view(state)
       {SplitPane, split_props, _children} = split_pane
@@ -224,7 +241,7 @@ defmodule AshAdminTui.Components.LayoutTest do
     end
 
     test "view adapts to new terminal size after resize" do
-      state = %{terminal_size: {120, 40}, focus: :sidebar}
+      state = minimal_state(%{terminal_size: {120, 40}})
 
       {VStack, _props, [_top_bar, split_pane | _rest]} = Layout.view(state)
       {SplitPane, split_props, _children} = split_pane
