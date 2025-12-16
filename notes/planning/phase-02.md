@@ -323,69 +323,69 @@ Add keyboard shortcuts for common actions (new, edit, delete).
 
 ## 2.7 Detail View Component
 
-- [ ] **Section 2.7 Complete**
+- [x] **Section 2.7 Complete**
 
 The detail view displays all attributes of a single record in a readable two-column format. It supports navigation to related records and provides action shortcuts.
 
 ### 2.7.1 Implement Detail View Structure
 
-- [ ] **Task 2.7.1 Complete**
+- [x] **Task 2.7.1 Complete**
 
 Create the detail view component with field display and relationship rendering.
 
-- [ ] 2.7.1.1 Create lib/ash_admin_tui/views/detail_view.ex module
-- [ ] 2.7.1.2 Define state: `%{resource: %{}, record: %{}, relationships: %{}, selected_field_idx: 0}`
-- [ ] 2.7.1.3 Implement init/2 taking resource and record ID, load mock record
-- [ ] 2.7.1.4 Implement view/1 with title showing resource name and ID
-- [ ] 2.7.1.5 Render attributes section with two-column layout (field name | value)
-- [ ] 2.7.1.6 Render relationships section below attributes
-- [ ] 2.7.1.7 Add footer with action shortcuts
+- [x] 2.7.1.1 Create lib/ash_admin_tui/views/detail_view.ex module
+- [x] 2.7.1.2 Define state: `%{resource: %{}, record: %{}, relationships: %{}, selected_field_idx: 0}`
+- [x] 2.7.1.3 Implement init/2 taking resource and record ID, load mock record
+- [x] 2.7.1.4 Implement view/1 with title showing resource name and ID
+- [x] 2.7.1.5 Render attributes section with two-column layout (field name | value)
+- [x] 2.7.1.6 Render relationships section below attributes
+- [x] 2.7.1.7 Add footer with action shortcuts
 
 ### 2.7.2 Implement Field Formatting
 
-- [ ] **Task 2.7.2 Complete**
+- [x] **Task 2.7.2 Complete**
 
 Build field formatting functions for different attribute types.
 
-- [ ] 2.7.2.1 Create format_field/2 function taking field type and value
-- [ ] 2.7.2.2 Format strings: display as-is with wrapping for long text
-- [ ] 2.7.2.3 Format numbers: right-align with thousand separators
-- [ ] 2.7.2.4 Format dates: "YYYY-MM-DD" format
-- [ ] 2.7.2.5 Format datetimes: "YYYY-MM-DD HH:MM:SS UTC" format
-- [ ] 2.7.2.6 Format booleans: "Yes"/"No" with green/red color
-- [ ] 2.7.2.7 Format relationships: show related record identifier with → indicator
+- [x] 2.7.2.1 Create format_field/2 function taking field type and value
+- [x] 2.7.2.2 Format strings: display as-is with wrapping for long text
+- [x] 2.7.2.3 Format numbers: right-align with thousand separators
+- [x] 2.7.2.4 Format dates: "YYYY-MM-DD" format
+- [x] 2.7.2.5 Format datetimes: "YYYY-MM-DD HH:MM:SS UTC" format
+- [x] 2.7.2.6 Format booleans: "Yes"/"No" with green/red color
+- [x] 2.7.2.7 Format relationships: show related record identifier with → indicator
 
 ### 2.7.3 Implement Navigation and Actions
 
-- [ ] **Task 2.7.3 Complete**
+- [x] **Task 2.7.3 Complete**
 
 Add keyboard navigation for relationships and action shortcuts.
 
-- [ ] 2.7.3.1 Handle Up/Down arrows: navigate through fields and relationships
-- [ ] 2.7.3.2 Handle Enter on relationship: generate {:navigate_to_related, resource, id} message
-- [ ] 2.7.3.3 Handle 'e' key: generate {:edit_record, id} message
-- [ ] 2.7.3.4 Handle 'd' key: generate {:delete_record, id} message
-- [ ] 2.7.3.5 Handle 'b' or Esc: generate {:back_to_list} message
-- [ ] 2.7.3.6 Handle 'a' key: generate {:show_actions} message
+- [x] 2.7.3.1 Handle Up/Down arrows: navigate through fields and relationships
+- [x] 2.7.3.2 Handle Enter on relationship: generate {:navigate_to_related, resource, id} message
+- [x] 2.7.3.3 Handle 'e' key: generate {:edit_record, id} message
+- [x] 2.7.3.4 Handle 'd' key: generate {:delete_record, id} message
+- [x] 2.7.3.5 Handle 'b' or Esc: generate {:back_to_list} message
+- [x] 2.7.3.6 Handle 'a' key: generate {:show_actions} message
 
 ### 2.7.4 Unit Tests - Section 2.7
 
-- [ ] **Unit Tests 2.7 Complete**
+- [x] **Unit Tests 2.7 Complete**
 
-- [ ] Test DetailView.init/2 loads mock record data
-- [ ] Test DetailView.view/1 renders title with resource name and ID
-- [ ] Test attributes section displays all fields
-- [ ] Test fields use two-column layout
-- [ ] Test format_field/2 correctly formats strings
-- [ ] Test format_field/2 correctly formats numbers
-- [ ] Test format_field/2 correctly formats dates
-- [ ] Test format_field/2 correctly formats booleans with color
-- [ ] Test relationships section displays related records
-- [ ] Test Up/Down arrows navigate fields
-- [ ] Test Enter on relationship generates navigate message
-- [ ] Test 'e' generates edit message
-- [ ] Test 'd' generates delete message
-- [ ] Test 'b' generates back_to_list message
+- [x] Test DetailView.init/2 loads mock record data
+- [x] Test DetailView.view/1 renders title with resource name and ID
+- [x] Test attributes section displays all fields
+- [x] Test fields use two-column layout
+- [x] Test format_field/2 correctly formats strings
+- [x] Test format_field/2 correctly formats numbers
+- [x] Test format_field/2 correctly formats dates
+- [x] Test format_field/2 correctly formats booleans with color
+- [x] Test relationships section displays related records
+- [x] Test Up/Down arrows navigate fields
+- [x] Test Enter on relationship generates navigate message
+- [x] Test 'e' generates edit message
+- [x] Test 'd' generates delete message
+- [x] Test 'b' generates back_to_list message
 
 ## 2.8 Form View Component
 
