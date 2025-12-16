@@ -11,9 +11,9 @@ defmodule AshAdminTui.Views.DetailViewTest do
       state = DetailView.init(resource: "User", record_id: 1)
 
       assert state.resource.name == "User"
-      assert state.record.id == 1
-      assert state.record.name == "User 1"
-      assert state.record.email == "user1@example.com"
+      assert state.record["id"] == 1
+      assert state.record["name"] == "User 1"
+      assert state.record["email"] == "user1@example.com"
       assert state.selected_field_idx == 0
     end
 
@@ -21,9 +21,9 @@ defmodule AshAdminTui.Views.DetailViewTest do
       state = DetailView.init(resource: "Post", record_id: 2)
 
       assert state.resource.name == "Post"
-      assert state.record.id == 2
-      assert state.record.title == "Post 2"
-      assert is_binary(state.record.body)
+      assert state.record["id"] == 2
+      assert state.record["title"] == "Post 2"
+      assert is_binary(state.record["body"])
       assert state.selected_field_idx == 0
     end
 
@@ -59,8 +59,8 @@ defmodule AshAdminTui.Views.DetailViewTest do
       state = DetailView.init(resource: "Unknown", record_id: 5)
 
       assert state.resource.name == "Unknown"
-      assert state.record.id == 5
-      assert state.record.name == "Record 5"
+      assert state.record["id"] == 5
+      assert state.record["name"] == "Record 5"
     end
   end
 
@@ -552,7 +552,7 @@ defmodule AshAdminTui.Views.DetailViewTest do
     test "action flow: view detail -> edit -> back" do
       # Initialize detail view
       state = DetailView.init(resource: "User", record_id: 5)
-      assert state.record.id == 5
+      assert state.record["id"] == 5
 
       # Press 'e' to edit
       event = %Event.Key{key: :char, char: "e"}

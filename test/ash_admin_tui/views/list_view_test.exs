@@ -41,10 +41,11 @@ defmodule AshAdminTui.Views.ListViewTest do
       state = ListView.init(resource: "User")
 
       first_record = List.first(state.records)
-      assert Map.has_key?(first_record, :id)
-      assert Map.has_key?(first_record, :name)
-      assert Map.has_key?(first_record, :email)
-      assert Map.has_key?(first_record, :active)
+      # Records use string keys to avoid atom table exhaustion
+      assert Map.has_key?(first_record, "id")
+      assert Map.has_key?(first_record, "name")
+      assert Map.has_key?(first_record, "email")
+      assert Map.has_key?(first_record, "active")
     end
 
     test "initializes with sort state" do
@@ -522,9 +523,10 @@ defmodule AshAdminTui.Views.ListViewTest do
 
       assert state.columns == ["id", "title", "status", "views"]
       first_record = List.first(state.records)
-      assert Map.has_key?(first_record, :title)
-      assert Map.has_key?(first_record, :status)
-      assert Map.has_key?(first_record, :views)
+      # Records use string keys to avoid atom table exhaustion
+      assert Map.has_key?(first_record, "title")
+      assert Map.has_key?(first_record, "status")
+      assert Map.has_key?(first_record, "views")
     end
 
     test "unknown resource has generic columns" do
@@ -532,9 +534,10 @@ defmodule AshAdminTui.Views.ListViewTest do
 
       assert state.columns == ["id", "name", "created_at"]
       first_record = List.first(state.records)
-      assert Map.has_key?(first_record, :id)
-      assert Map.has_key?(first_record, :name)
-      assert Map.has_key?(first_record, :created_at)
+      # Records use string keys to avoid atom table exhaustion
+      assert Map.has_key?(first_record, "id")
+      assert Map.has_key?(first_record, "name")
+      assert Map.has_key?(first_record, "created_at")
     end
   end
 end

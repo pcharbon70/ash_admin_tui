@@ -44,26 +44,29 @@ defmodule AshAdminTui.Views.FormViewTest do
       assert state.resource.name == "User"
       assert state.mode == :edit
       assert state.record_id == 5
-      assert state.form_values.name == "User 5"
-      assert state.form_values.email == "user5@example.com"
-      assert state.form_values.active == false  # odd number
+      # Form values use string keys to avoid atom table exhaustion
+      assert state.form_values["name"] == "User 5"
+      assert state.form_values["email"] == "user5@example.com"
+      assert state.form_values["active"] == false  # odd number
       assert state.has_changes == false
     end
 
     test "loads values for Post resource in edit mode" do
       state = FormView.init(resource: "Post", mode: :edit, record_id: 2)
 
-      assert state.form_values.title == "Post 2"
-      assert state.form_values.body == "Body text for post 2"
-      assert state.form_values.status == "published"
+      # Form values use string keys to avoid atom table exhaustion
+      assert state.form_values["title"] == "Post 2"
+      assert state.form_values["body"] == "Body text for post 2"
+      assert state.form_values["status"] == "published"
     end
 
     test "loads generic values for unknown resource in edit mode" do
       state = FormView.init(resource: "Unknown", mode: :edit, record_id: 3)
 
-      assert state.form_values.name == "Record 3"
-      assert state.form_values.description == "Description for record 3"
-      assert state.form_values.active == true
+      # Form values use string keys to avoid atom table exhaustion
+      assert state.form_values["name"] == "Record 3"
+      assert state.form_values["description"] == "Description for record 3"
+      assert state.form_values["active"] == true
     end
   end
 
@@ -205,7 +208,8 @@ defmodule AshAdminTui.Views.FormViewTest do
   describe "view/1 - validation errors" do
     test "displays validation errors below fields" do
       state = FormView.init(resource: "User", mode: :create)
-      state = %{state | errors: %{email: "is required"}}
+      # Errors use string keys to avoid atom table exhaustion
+      state = %{state | errors: %{"email" => "is required"}}
 
       {VStack, _props, [_title, fields | _rest]} = FormView.view(state)
       {VStack, _fields_props, field_rows} = fields
@@ -234,7 +238,8 @@ defmodule AshAdminTui.Views.FormViewTest do
 
     test "multiple validation errors display correctly" do
       state = FormView.init(resource: "User", mode: :create)
-      state = %{state | errors: %{name: "is required", email: "is required"}}
+      # Errors use string keys to avoid atom table exhaustion
+      state = %{state | errors: %{"name" => "is required", "email" => "is required"}}
 
       {VStack, _props, [_title, fields | _rest]} = FormView.view(state)
       {VStack, _fields_props, field_rows} = fields
@@ -382,11 +387,12 @@ defmodule AshAdminTui.Views.FormViewTest do
   describe "update/2 - field editing" do
     test "toggle_boolean toggles boolean field value" do
       state = FormView.init(resource: "User", mode: :create)
-      state = %{state | form_values: %{active: false}}
+      # Form values use string keys to avoid atom table exhaustion
+      state = %{state | form_values: %{"active" => false}}
 
       {new_state, _commands} = FormView.update({:toggle_boolean, "active"}, state)
 
-      assert new_state.form_values.active == true
+      assert new_state.form_values["active"] == true
       assert new_state.has_changes == true
     end
 
@@ -400,11 +406,12 @@ defmodule AshAdminTui.Views.FormViewTest do
 
     test "append_char appends character to field value" do
       state = FormView.init(resource: "User", mode: :create)
-      state = %{state | form_values: %{name: "Alice"}}
+      # Form values use string keys to avoid atom table exhaustion
+      state = %{state | form_values: %{"name" => "Alice"}}
 
       {new_state, _commands} = FormView.update({:append_char, "name", "x"}, state)
 
-      assert new_state.form_values.name == "Alicex"
+      assert new_state.form_values["name"] == "Alicex"
       assert new_state.has_changes == true
     end
 
@@ -413,26 +420,28 @@ defmodule AshAdminTui.Views.FormViewTest do
 
       {new_state, _commands} = FormView.update({:append_char, "name", "A"}, state)
 
-      assert new_state.form_values.name == "A"
+      assert new_state.form_values["name"] == "A"
     end
 
     test "backspace_field removes last character" do
       state = FormView.init(resource: "User", mode: :create)
-      state = %{state | form_values: %{name: "Alice"}}
+      # Form values use string keys to avoid atom table exhaustion
+      state = %{state | form_values: %{"name" => "Alice"}}
 
       {new_state, _commands} = FormView.update({:backspace_field, "name"}, state)
 
-      assert new_state.form_values.name == "Alic"
+      assert new_state.form_values["name"] == "Alic"
       assert new_state.has_changes == true
     end
 
     test "backspace_field handles empty value" do
       state = FormView.init(resource: "User", mode: :create)
-      state = %{state | form_values: %{name: ""}}
+      # Form values use string keys to avoid atom table exhaustion
+      state = %{state | form_values: %{"name" => ""}}
 
       {new_state, _commands} = FormView.update({:backspace_field, "name"}, state)
 
-      assert new_state.form_values.name == ""
+      assert new_state.form_values["name"] == ""
     end
 
     test "edit_field marks form as changed" do
@@ -447,12 +456,13 @@ defmodule AshAdminTui.Views.FormViewTest do
   describe "update/2 - form submission" do
     test "submit_form with valid data generates parent message" do
       state = FormView.init(resource: "User", mode: :create)
-      state = %{state | form_values: %{name: "Alice", email: "alice@example.com"}}
+      # Form values use string keys to avoid atom table exhaustion
+      state = %{state | form_values: %{"name" => "Alice", "email" => "alice@example.com"}}
 
       {new_state, commands} = FormView.update(:submit_form, state)
 
       assert new_state.errors == %{}
-      assert commands == [{:parent_msg, {:submit_form, :create, "User", nil, %{name: "Alice", email: "alice@example.com"}}}]
+      assert commands == [{:parent_msg, {:submit_form, :create, "User", nil, %{"name" => "Alice", "email" => "alice@example.com"}}}]
     end
 
     test "submit_form with missing required fields shows errors" do
@@ -461,14 +471,16 @@ defmodule AshAdminTui.Views.FormViewTest do
 
       {new_state, commands} = FormView.update(:submit_form, state)
 
-      assert Map.has_key?(new_state.errors, :name)
-      assert Map.has_key?(new_state.errors, :email)
+      # Errors use string keys to avoid atom table exhaustion
+      assert Map.has_key?(new_state.errors, "name")
+      assert Map.has_key?(new_state.errors, "email")
       assert commands == []
     end
 
     test "submit_form in edit mode includes record_id" do
       state = FormView.init(resource: "User", mode: :edit, record_id: 5)
-      state = %{state | form_values: %{name: "Bob", email: "bob@example.com"}}
+      # Form values use string keys to avoid atom table exhaustion
+      state = %{state | form_values: %{"name" => "Bob", "email" => "bob@example.com"}}
 
       {new_state, commands} = FormView.update(:submit_form, state)
 
@@ -482,7 +494,8 @@ defmodule AshAdminTui.Views.FormViewTest do
 
       {new_state, commands} = FormView.update(:submit_form, state)
 
-      assert Map.has_key?(new_state.errors, :title)
+      # Errors use string keys to avoid atom table exhaustion
+      assert Map.has_key?(new_state.errors, "title")
       assert commands == []
     end
   end
@@ -526,14 +539,14 @@ defmodule AshAdminTui.Views.FormViewTest do
       {state, _} = FormView.update({:move_focus, :next}, state)
       assert state.focused_field_idx == 1
 
-      # Edit field
+      # Edit field - form values use string keys
       {state, _} = FormView.update({:append_char, "email", "a"}, state)
-      assert state.form_values.email == "a"
+      assert state.form_values["email"] == "a"
       assert state.has_changes == true
 
       # Add more characters
       {state, _} = FormView.update({:append_char, "email", "@"}, state)
-      assert state.form_values.email == "a@"
+      assert state.form_values["email"] == "a@"
 
       # Navigate back
       {state, _} = FormView.update({:move_focus, :previous}, state)
@@ -543,7 +556,7 @@ defmodule AshAdminTui.Views.FormViewTest do
       {state, _} = FormView.update({:append_char, "name", "B"}, state)
       {state, _} = FormView.update({:append_char, "name", "o"}, state)
       {state, _} = FormView.update({:append_char, "name", "b"}, state)
-      assert state.form_values.name == "Bob"
+      assert state.form_values["name"] == "Bob"
 
       # Complete email
       {state, _} = FormView.update({:move_focus, :next}, state)
@@ -554,7 +567,7 @@ defmodule AshAdminTui.Views.FormViewTest do
       {state, _} = FormView.update({:append_char, "email", "b"}, state)
       {state, _} = FormView.update({:append_char, "email", "@"}, state)
       {state, _} = FormView.update({:append_char, "email", "e"}, state)
-      assert state.form_values.email == "bob@e"
+      assert state.form_values["email"] == "bob@e"
 
       # Submit form (now valid in our simple validator)
       {state, commands} = FormView.update(:submit_form, state)
@@ -563,9 +576,9 @@ defmodule AshAdminTui.Views.FormViewTest do
     end
 
     test "edit flow: load values -> modify -> submit" do
-      # Initialize edit form with pre-populated values
+      # Initialize edit form with pre-populated values - form values use string keys
       state = FormView.init(resource: "Post", mode: :edit, record_id: 10)
-      assert state.form_values.title == "Post 10"
+      assert state.form_values["title"] == "Post 10"
       assert state.has_changes == false
 
       # Navigate to body field
@@ -621,13 +634,13 @@ defmodule AshAdminTui.Views.FormViewTest do
       {state, _} = FormView.update({:move_focus, :next}, state)
       assert state.focused_field_idx == 2
 
-      # Toggle boolean
+      # Toggle boolean - form values use string keys
       {state, _} = FormView.update({:toggle_boolean, "active"}, state)
-      assert state.form_values.active == true
+      assert state.form_values["active"] == true
 
       # Toggle again
       {state, _} = FormView.update({:toggle_boolean, "active"}, state)
-      assert state.form_values.active == false
+      assert state.form_values["active"] == false
     end
   end
 
@@ -637,10 +650,10 @@ defmodule AshAdminTui.Views.FormViewTest do
 
       assert state.fields == ["name", "email", "active"]
 
-      # Test validation
+      # Test validation - errors use string keys
       {state, _} = FormView.update(:submit_form, state)
-      assert Map.has_key?(state.errors, :name)
-      assert Map.has_key?(state.errors, :email)
+      assert Map.has_key?(state.errors, "name")
+      assert Map.has_key?(state.errors, "email")
     end
 
     test "Post resource has correct fields and validation" do
@@ -648,9 +661,9 @@ defmodule AshAdminTui.Views.FormViewTest do
 
       assert state.fields == ["title", "body", "status", "is_featured"]
 
-      # Test validation
+      # Test validation - errors use string keys
       {state, _} = FormView.update(:submit_form, state)
-      assert Map.has_key?(state.errors, :title)
+      assert Map.has_key?(state.errors, "title")
     end
 
     test "Unknown resource uses generic fields" do

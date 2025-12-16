@@ -71,8 +71,9 @@ defmodule AshAdminTui.Integration.Phase2IntegrationTest do
     test "detail view displays record details" do
       detail_state = DetailView.init(resource: "User", record_id: 1)
 
-      assert detail_state.record.id == 1
-      assert Map.has_key?(detail_state.record, :name)
+      assert detail_state.record["id"] == 1
+      # Records use string keys to avoid atom table exhaustion
+      assert Map.has_key?(detail_state.record, "name")
       assert length(detail_state.fields) > 0
 
       # Verify view renders correctly
@@ -137,10 +138,10 @@ defmodule AshAdminTui.Integration.Phase2IntegrationTest do
     test "filling form and submitting generates submit message" do
       form_state = FormView.init(resource: "User", mode: :create)
 
-      # Fill in required fields
+      # Fill in required fields - use string keys to avoid atom table exhaustion
       form_state = %{form_state | form_values: %{
-        name: "Alice",
-        email: "alice@example.com"
+        "name" => "Alice",
+        "email" => "alice@example.com"
       }}
 
       # Simulate pressing F5 to submit
@@ -151,8 +152,8 @@ defmodule AshAdminTui.Integration.Phase2IntegrationTest do
 
       # Should generate submit_form command
       assert [{:parent_msg, {:submit_form, :create, "User", nil, values}}] = commands
-      assert values.name == "Alice"
-      assert values.email == "alice@example.com"
+      assert values["name"] == "Alice"
+      assert values["email"] == "alice@example.com"
     end
 
     test "pressing 'e' in detail view opens edit form" do
@@ -173,8 +174,8 @@ defmodule AshAdminTui.Integration.Phase2IntegrationTest do
 
       assert form_state.mode == :edit
       assert form_state.record_id == 5
-      assert form_state.form_values.name == "User 5"
-      assert form_state.form_values.email == "user5@example.com"
+      assert form_state.form_values["name"] == "User 5"
+      assert form_state.form_values["email"] == "user5@example.com"
     end
 
     test "form validation displays errors" do
@@ -490,7 +491,7 @@ defmodule AshAdminTui.Integration.Phase2IntegrationTest do
 
       # Step 4: View detail
       detail_state = DetailView.init(resource: resource_name, record_id: 1)
-      assert detail_state.record.id == 1
+      assert detail_state.record["id"] == 1
 
       # Step 5: Edit record
       {_detail_state, commands} = DetailView.update({:edit_record, 1}, detail_state)
@@ -569,11 +570,11 @@ defmodule AshAdminTui.Integration.Phase2IntegrationTest do
       assert map_size(form_state.errors) > 0
       assert commands == []
 
-      # Fill in required fields and clear errors
+      # Fill in required fields and clear errors - use string keys
       form_state = %{form_state |
         form_values: %{
-          name: "Test User",
-          email: "test@example.com"
+          "name" => "Test User",
+          "email" => "test@example.com"
         },
         errors: %{}
       }
