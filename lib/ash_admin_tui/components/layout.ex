@@ -36,7 +36,7 @@ defmodule AshAdminTui.Components.Layout do
 
   alias TermUI.Event
   alias TermUI.Widget.{Block, Label, SplitPane, VStack}
-  alias AshAdminTui.Components.{TopBar, StatusBar}
+  alias AshAdminTui.Components.{TopBar, StatusBar, Sidebar}
 
   @doc """
   Initializes the layout component state.
@@ -64,6 +64,8 @@ defmodule AshAdminTui.Components.Layout do
       tenant: nil,
       # Current view (nil, :list, :detail, :form)
       view: nil,
+      # Sidebar state
+      sidebar: Sidebar.init([]),
       # Status bar state
       status_bar: StatusBar.init([])
     }
@@ -73,6 +75,7 @@ defmodule AshAdminTui.Components.Layout do
   Converts terminal events to application messages.
 
   Maps keyboard events to focus management and resize events to terminal size updates.
+  Delegates navigation events to sidebar when sidebar has focus.
   """
   @spec event_to_msg(Event.t(), map()) :: {:msg, any()} | :ignore
   def event_to_msg(%Event.Key{key: :char, char: "\t"}, _state) do
@@ -85,8 +88,16 @@ defmodule AshAdminTui.Components.Layout do
     {:msg, {:resize, {width, height}}}
   end
 
+  def event_to_msg(event, %{focus: :sidebar, sidebar: sidebar_state} = _state) do
+    # Delegate events to sidebar when it has focus
+    case Sidebar.event_to_msg(event, sidebar_state) do
+      {:msg, msg} -> {:msg, {:sidebar, msg}}
+      :ignore -> :ignore
+    end
+  end
+
   def event_to_msg(_event, _state) do
-    # All other events are passed to the focused component
+    # All other events ignored for now (content area will handle later)
     :ignore
   end
 
@@ -108,6 +119,47 @@ defmodule AshAdminTui.Components.Layout do
 
   def update({:resize, {width, height}}, state) do
     {%{state | terminal_size: {width, height}}, []}
+  end
+
+  def update({:sidebar, sidebar_msg}, state) do
+    {new_sidebar, commands} = Sidebar.update(sidebar_msg, state.sidebar)
+
+    # Handle commands from sidebar (e.g., resource selection)
+    layout_commands =
+      Enum.flat_map(commands, fn
+        {:parent_msg, {:select_resource, _domain, _resource}} ->
+          # Navigation state will be updated below
+          # For now, we'll just pass through
+          []
+
+        _ ->
+          []
+      end)
+
+    # Update navigation if resource was selected
+    new_state =
+      if Enum.any?(commands, fn
+           {:parent_msg, {:select_resource, _domain, _resource}} -> true
+           _ -> false
+         end) do
+        command = Enum.find(commands, fn
+          {:parent_msg, {:select_resource, _domain, _resource}} -> true
+          _ -> false
+        end)
+
+        case command do
+          {:parent_msg, {:select_resource, domain, resource}} ->
+            new_nav = %{domain: domain, resource: resource, record_id: nil}
+            %{state | sidebar: new_sidebar, navigation: new_nav}
+
+          _ ->
+            %{state | sidebar: new_sidebar}
+        end
+      else
+        %{state | sidebar: new_sidebar}
+      end
+
+    {new_state, layout_commands}
   end
 
   def update(_msg, state) do
@@ -186,17 +238,7 @@ defmodule AshAdminTui.Components.Layout do
       border: border_style,
       border_color: if(state.focus == :sidebar, do: :cyan, else: :white)
     }, [
-      {Label, %{
-        text: """
-
-
-        [Sidebar Content]
-
-        Navigation tree will go here
-
-        """,
-        align: :center
-      }}
+      Sidebar.view(state.sidebar)
     ]}
   end
 
