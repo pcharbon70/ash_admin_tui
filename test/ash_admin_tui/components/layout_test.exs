@@ -17,6 +17,13 @@ defmodule AshAdminTui.Components.LayoutTest do
         tenant: nil,
         view: nil,
         sidebar: %{domains: [], selected_index: 0, expanded_domains: MapSet.new()},
+        content_area: %{
+          view_type: nil,
+          view_states: %{list: %{}, detail: %{}, form: %{}, action: %{}},
+          error_message: nil,
+          loading_message: nil,
+          previous_view: nil
+        },
         status_bar: %{toast: nil}
       },
       overrides
@@ -35,6 +42,8 @@ defmodule AshAdminTui.Components.LayoutTest do
       assert state.view == nil
       assert is_map(state.sidebar)
       assert is_list(state.sidebar.domains)
+      assert is_map(state.content_area)
+      assert state.content_area.view_type == nil
       assert state.status_bar == %{toast: nil}
     end
   end

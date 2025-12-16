@@ -35,8 +35,8 @@ defmodule AshAdminTui.Components.Layout do
   """
 
   alias TermUI.Event
-  alias TermUI.Widget.{Block, Label, SplitPane, VStack}
-  alias AshAdminTui.Components.{TopBar, StatusBar, Sidebar}
+  alias TermUI.Widget.{Block, SplitPane, VStack}
+  alias AshAdminTui.Components.{TopBar, StatusBar, Sidebar, ContentArea}
 
   @doc """
   Initializes the layout component state.
@@ -66,6 +66,8 @@ defmodule AshAdminTui.Components.Layout do
       view: nil,
       # Sidebar state
       sidebar: Sidebar.init([]),
+      # Content area state
+      content_area: ContentArea.init([]),
       # Status bar state
       status_bar: StatusBar.init([])
     }
@@ -162,6 +164,24 @@ defmodule AshAdminTui.Components.Layout do
     {new_state, layout_commands}
   end
 
+  def update({:content_area, content_msg}, state) do
+    {new_content_area, commands} = ContentArea.update(content_msg, state.content_area)
+
+    # Handle commands from content area (e.g., data fetch requests)
+    layout_commands =
+      Enum.flat_map(commands, fn
+        {:fetch_view_data, _view_type, _params} ->
+          # In Phase 2, we'll simulate data fetching
+          # Phase 3 will integrate with Ash Framework
+          []
+
+        _ ->
+          []
+      end)
+
+    {%{state | content_area: new_content_area}, layout_commands}
+  end
+
   def update(_msg, state) do
     {state, []}
   end
@@ -250,17 +270,7 @@ defmodule AshAdminTui.Components.Layout do
       border: border_style,
       border_color: if(state.focus == :content, do: :cyan, else: :white)
     }, [
-      {Label, %{
-        text: """
-
-
-        [Content Area]
-
-        List/Detail/Form views will go here
-
-        """,
-        align: :center
-      }}
+      ContentArea.view(state.content_area)
     ]}
   end
 
