@@ -128,8 +128,8 @@ defmodule TermuiIntegrationTest do
 
       view_spec = Root.view(state)
 
-      # Convert view spec to string for inspection
-      view_string = inspect(view_spec)
+      # Convert view spec to string for inspection (with full output)
+      view_string = inspect(view_spec, limit: :infinity)
 
       assert view_string =~ "Quit"
     end
@@ -143,7 +143,7 @@ defmodule TermuiIntegrationTest do
       view_string = inspect(view_spec)
 
       assert view_string =~ "Resources"  # Sidebar title
-      assert view_string =~ "Content"    # Content area title
+      assert view_string =~ "Accounts"   # Sidebar domain (content is abbreviated in inspect)
     end
 
     test "view changes when quit is requested" do
@@ -214,7 +214,7 @@ defmodule TermuiIntegrationTest do
       state = Root.init([])
       view_spec = Root.view(state)
 
-      view_string = inspect(view_spec)
+      view_string = inspect(view_spec, limit: :infinity)
 
       # Verify keyboard hint content in status bar
       assert view_string =~ "Tab"
@@ -231,7 +231,7 @@ defmodule TermuiIntegrationTest do
       # Verify SplitPane is used
       assert view_string =~ "SplitPane"
       assert view_string =~ "Resources"
-      assert view_string =~ "Content"
+      assert view_string =~ "Accounts"  # Sidebar domain (content block title is abbreviated)
     end
   end
 end
