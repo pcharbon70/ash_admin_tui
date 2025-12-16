@@ -389,69 +389,69 @@ Add keyboard navigation for relationships and action shortcuts.
 
 ## 2.8 Form View Component
 
-- [ ] **Section 2.8 Complete**
+- [x] **Section 2.8 Complete**
 
 The form view provides create and edit forms with field validation and relationship selection. It dynamically generates form fields based on resource attributes and uses PickList for associations.
 
 ### 2.8.1 Implement Form View Structure
 
-- [ ] **Task 2.8.1 Complete**
+- [x] **Task 2.8.1 Complete**
 
 Create the form view component with field rendering and validation display.
 
-- [ ] 2.8.1.1 Create lib/ash_admin_tui/views/form_view.ex module
-- [ ] 2.8.1.2 Define state: `%{resource: %{}, mode: :create | :edit, record_id: nil, form_values: %{}, errors: %{}, focused_field: nil}`
-- [ ] 2.8.1.3 Implement init/2 for create mode with empty form values
-- [ ] 2.8.1.4 Implement init/3 for edit mode with pre-populated values
-- [ ] 2.8.1.5 Implement view/1 with title "Create <Resource>" or "Edit <Resource>"
-- [ ] 2.8.1.6 Render form fields with labels and input widgets
-- [ ] 2.8.1.7 Display validation errors below fields in red
+- [x] 2.8.1.1 Create lib/ash_admin_tui/views/form_view.ex module
+- [x] 2.8.1.2 Define state: `%{resource: %{}, mode: :create | :edit, record_id: nil, form_values: %{}, errors: %{}, focused_field: nil}`
+- [x] 2.8.1.3 Implement init/2 for create mode with empty form values
+- [x] 2.8.1.4 Implement init/3 for edit mode with pre-populated values
+- [x] 2.8.1.5 Implement view/1 with title "Create <Resource>" or "Edit <Resource>"
+- [x] 2.8.1.6 Render form fields with labels and input widgets
+- [x] 2.8.1.7 Display validation errors below fields in red
 
 ### 2.8.2 Implement Field Input Widgets
 
-- [ ] **Task 2.8.2 Complete**
+- [x] **Task 2.8.2 Complete**
 
 Build input widgets for different field types with appropriate validation.
 
-- [ ] 2.8.2.1 Create render_field/3 function taking field type, value, and focus
-- [ ] 2.8.2.2 For string fields: render TextInput widget
-- [ ] 2.8.2.3 For number fields: render TextInput with numeric validation
-- [ ] 2.8.2.4 For boolean fields: render checkbox or toggle
-- [ ] 2.8.2.5 For enum fields: render select/dropdown with allowed values
-- [ ] 2.8.2.6 For association fields: render PickList trigger with search
-- [ ] 2.8.2.7 Apply focus styling to currently focused field
+- [x] 2.8.2.1 Create render_field/3 function taking field type, value, and focus
+- [x] 2.8.2.2 For string fields: render TextInput widget
+- [x] 2.8.2.3 For number fields: render TextInput with numeric validation
+- [x] 2.8.2.4 For boolean fields: render checkbox or toggle
+- [x] 2.8.2.5 For enum fields: render select/dropdown with allowed values
+- [x] 2.8.2.6 For association fields: render PickList trigger with search
+- [x] 2.8.2.7 Apply focus styling to currently focused field
 
 ### 2.8.3 Implement Form Navigation and Submission
 
-- [ ] **Task 2.8.3 Complete**
+- [x] **Task 2.8.3 Complete**
 
 Add keyboard navigation between fields and form submission handling.
 
-- [ ] 2.8.3.1 Handle Tab: move focus to next field
-- [ ] 2.8.3.2 Handle Shift-Tab: move focus to previous field
-- [ ] 2.8.3.3 Handle F5 or Ctrl-S: validate and submit form
-- [ ] 2.8.3.4 Handle Esc: show confirmation dialog if changes made, else go back
-- [ ] 2.8.3.5 Implement client-side validation on field blur
-- [ ] 2.8.3.6 Generate {:submit_form, mode, values} message on submit
-- [ ] 2.8.3.7 Display validation errors and focus first error field
+- [x] 2.8.3.1 Handle Tab: move focus to next field
+- [x] 2.8.3.2 Handle Shift-Tab: move focus to previous field
+- [x] 2.8.3.3 Handle F5 or Ctrl-S: validate and submit form
+- [x] 2.8.3.4 Handle Esc: show confirmation dialog if changes made, else go back
+- [x] 2.8.3.5 Implement client-side validation on field blur
+- [x] 2.8.3.6 Generate {:submit_form, mode, values} message on submit
+- [x] 2.8.3.7 Display validation errors and focus first error field
 
 ### 2.8.4 Unit Tests - Section 2.8
 
-- [ ] **Unit Tests 2.8 Complete**
+- [x] **Unit Tests 2.8 Complete**
 
-- [ ] Test FormView.init/2 creates empty form for create mode
-- [ ] Test FormView.init/3 pre-populates form for edit mode
-- [ ] Test FormView.view/1 renders title correctly
-- [ ] Test form displays all fields with labels
-- [ ] Test render_field/3 creates TextInput for string fields
-- [ ] Test render_field/3 creates numeric input for number fields
-- [ ] Test render_field/3 creates checkbox for boolean fields
-- [ ] Test Tab moves focus to next field
-- [ ] Test Shift-Tab moves focus to previous field
-- [ ] Test F5 submits form with validation
-- [ ] Test validation errors display below fields
-- [ ] Test Esc shows confirmation if changes made
-- [ ] Test submit generates correct message
+- [x] Test FormView.init/2 creates empty form for create mode
+- [x] Test FormView.init/3 pre-populates form for edit mode
+- [x] Test FormView.view/1 renders title correctly
+- [x] Test form displays all fields with labels
+- [x] Test render_field/3 creates TextInput for string fields
+- [x] Test render_field/3 creates numeric input for number fields
+- [x] Test render_field/3 creates checkbox for boolean fields
+- [x] Test Tab moves focus to next field
+- [x] Test Shift-Tab moves focus to previous field
+- [x] Test F5 submits form with validation
+- [x] Test validation errors display below fields
+- [x] Test Esc shows confirmation if changes made
+- [x] Test submit generates correct message
 
 ## 2.9 Integration Tests
 
