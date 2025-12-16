@@ -113,8 +113,8 @@ defmodule IntegrationTest do
       state = Root.init([])
       view_spec = Root.view(state)
 
-      # Convert to string and verify content
-      view_string = inspect(view_spec)
+      # Convert to string and verify content (with full output to see status bar)
+      view_string = inspect(view_spec, limit: :infinity)
       assert view_string =~ "Quit"
     end
 
@@ -134,7 +134,7 @@ defmodule IntegrationTest do
       normal_state = Root.init([])
       normal_view = inspect(Root.view(normal_state))
       assert normal_view =~ "Resources"
-      assert normal_view =~ "Content"
+      assert normal_view =~ "Accounts"  # Sidebar content
 
       # Test shutdown state
       shutdown_state = %{normal_state | quit_requested: true}
@@ -327,7 +327,7 @@ defmodule IntegrationTest do
       view = Root.view(state)
       view_string = inspect(view)
       assert view_string =~ "Resources"  # Sidebar title
-      assert view_string =~ "Content"    # Content area title
+      assert view_string =~ "Accounts"   # Sidebar domains
 
       # 4. User presses 'q'
       event = %TermUI.Event.Key{key: :char, char: "q"}
