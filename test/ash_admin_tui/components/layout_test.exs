@@ -14,7 +14,9 @@ defmodule AshAdminTui.Components.LayoutTest do
         focus: :sidebar,
         navigation: %{domain: "Home", resource: nil, record_id: nil},
         actor: nil,
-        tenant: nil
+        tenant: nil,
+        view: nil,
+        status_bar: %{toast: nil}
       },
       overrides
     )
@@ -29,6 +31,8 @@ defmodule AshAdminTui.Components.LayoutTest do
       assert state.navigation == %{domain: "Home", resource: nil, record_id: nil}
       assert state.actor == nil
       assert state.tenant == nil
+      assert state.view == nil
+      assert state.status_bar == %{toast: nil}
     end
   end
 

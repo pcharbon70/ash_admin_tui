@@ -99,51 +99,51 @@ Build breadcrumb display showing current navigation path (Domain › Resource �
 
 ## 2.3 Status Bar Component
 
-- [ ] **Section 2.3 Complete**
+- [x] **Section 2.3 Complete**
 
 The status bar provides context-sensitive help showing available keyboard shortcuts for the current view. It also displays transient toast notifications for success and error messages.
 
 ### 2.3.1 Implement Status Bar Rendering
 
-- [ ] **Task 2.3.1 Complete**
+- [x] **Task 2.3.1 Complete**
 
 Create the status bar component with context-sensitive shortcut display.
 
-- [ ] 2.3.1.1 Create lib/ash_admin_tui/components/status_bar.ex module
-- [ ] 2.3.1.2 Implement view/1 taking focus and view state as input
-- [ ] 2.3.1.3 Define shortcut mappings for each focus/view combination
-- [ ] 2.3.1.4 Render shortcuts in format "[Key] Action [Key] Action"
-- [ ] 2.3.1.5 For sidebar focus: show "[↑↓] Navigate [←→] Expand [Enter] Select [Q] Quit"
-- [ ] 2.3.1.6 For list view focus: show "[↑↓] Navigate [Enter] View [N]ew [E]dit [D]elete"
-- [ ] 2.3.1.7 For detail view focus: show "[E]dit [D]elete [B]ack [A]ctions"
+- [x] 2.3.1.1 Create lib/ash_admin_tui/components/status_bar.ex module
+- [x] 2.3.1.2 Implement view/1 taking focus and view state as input
+- [x] 2.3.1.3 Define shortcut mappings for each focus/view combination
+- [x] 2.3.1.4 Render shortcuts in format "[Key] Action [Key] Action"
+- [x] 2.3.1.5 For sidebar focus: show "[↑↓] Navigate [←→] Expand [Enter] Select [Q] Quit"
+- [x] 2.3.1.6 For list view focus: show "[↑↓] Navigate [Enter] View [N]ew [E]dit [D]elete"
+- [x] 2.3.1.7 For detail view focus: show "[E]dit [D]elete [B]ack [A]ctions"
 
 ### 2.3.2 Implement Toast Notification System
 
-- [ ] **Task 2.3.2 Complete**
+- [x] **Task 2.3.2 Complete**
 
 Build toast notification system for displaying success/error messages that auto-dismiss.
 
-- [ ] 2.3.2.1 Add toast state: `%{message: nil, type: :success | :error, expires_at: timestamp}`
-- [ ] 2.3.2.2 Implement show_toast/3 function taking message, type, and duration
-- [ ] 2.3.2.3 When toast is active, replace shortcuts with toast message
-- [ ] 2.3.2.4 Apply color coding: green for success, red for error
-- [ ] 2.3.2.5 Add countdown timer showing "dismissed in Xs"
-- [ ] 2.3.2.6 Auto-dismiss toast after duration expires
-- [ ] 2.3.2.7 Allow manual dismiss with any key press
+- [x] 2.3.2.1 Add toast state: `%{message: nil, type: :success | :error, expires_at: timestamp}`
+- [x] 2.3.2.2 Implement show_toast/3 function taking message, type, and duration
+- [x] 2.3.2.3 When toast is active, replace shortcuts with toast message
+- [x] 2.3.2.4 Apply color coding: green for success, red for error
+- [x] 2.3.2.5 Add countdown timer showing "dismissed in Xs"
+- [x] 2.3.2.6 Auto-dismiss toast after duration expires
+- [x] 2.3.2.7 Allow manual dismiss with any key press
 
 ### 2.3.3 Unit Tests - Section 2.3
 
-- [ ] **Unit Tests 2.3 Complete**
+- [x] **Unit Tests 2.3 Complete**
 
-- [ ] Test StatusBar.view/1 renders shortcuts for sidebar focus
-- [ ] Test StatusBar.view/1 renders shortcuts for list view focus
-- [ ] Test StatusBar.view/1 renders shortcuts for detail view focus
-- [ ] Test shortcuts are context-appropriate for each view
-- [ ] Test show_toast/3 displays toast message
-- [ ] Test toast has correct color for success/error types
-- [ ] Test toast auto-dismisses after duration
-- [ ] Test toast dismisses on key press
-- [ ] Test toast replaces shortcuts while active
+- [x] Test StatusBar.view/1 renders shortcuts for sidebar focus
+- [x] Test StatusBar.view/1 renders shortcuts for list view focus
+- [x] Test StatusBar.view/1 renders shortcuts for detail view focus
+- [x] Test shortcuts are context-appropriate for each view
+- [x] Test show_toast/3 displays toast message
+- [x] Test toast has correct color for success/error types
+- [x] Test toast auto-dismisses after duration
+- [x] Test toast dismisses on key press
+- [x] Test toast replaces shortcuts while active
 
 ## 2.4 Sidebar Navigation Component
 

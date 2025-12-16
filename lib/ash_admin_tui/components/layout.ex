@@ -36,7 +36,7 @@ defmodule AshAdminTui.Components.Layout do
 
   alias TermUI.Event
   alias TermUI.Widget.{Block, Label, SplitPane, VStack}
-  alias AshAdminTui.Components.TopBar
+  alias AshAdminTui.Components.{TopBar, StatusBar}
 
   @doc """
   Initializes the layout component state.
@@ -61,7 +61,11 @@ defmodule AshAdminTui.Components.Layout do
       # Session state (mock data for Phase 2)
       navigation: %{domain: "Home", resource: nil, record_id: nil},
       actor: nil,
-      tenant: nil
+      tenant: nil,
+      # Current view (nil, :list, :detail, :form)
+      view: nil,
+      # Status bar state
+      status_bar: StatusBar.init([])
     }
   end
 
@@ -218,14 +222,20 @@ defmodule AshAdminTui.Components.Layout do
     ]}
   end
 
-  defp render_status_bar(_state, _width, height) do
+  defp render_status_bar(state, width, height) do
+    # Prepare state for StatusBar component
+    status_bar_state = %{
+      focus: state.focus,
+      view: state.view,
+      toast: state.status_bar.toast,
+      width: width - 4  # Account for border padding
+    }
+
     {Block, %{
       border: :single,
       height: height
     }, [
-      {Label, %{
-        text: "[Tab] Switch Focus  [Q] Quit"
-      }}
+      StatusBar.view(status_bar_state)
     ]}
   end
 end
