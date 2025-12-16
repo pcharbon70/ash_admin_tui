@@ -50,7 +50,7 @@ defmodule AshAdminTui.Views.DetailView do
       iex> state = AshAdminTui.Views.DetailView.init(resource: "User", record_id: 1)
       iex> state.resource.name
       "User"
-      iex> state.record.id
+      iex> state.record["id"]
       1
       iex> state.selected_field_idx
       0
@@ -106,11 +106,12 @@ defmodule AshAdminTui.Views.DetailView do
         relationship_name = Enum.at(relationship_names, relationship_idx)
         related_records = Map.get(state.relationships, relationship_name, [])
 
-        if length(related_records) > 0 do
-          first_related = hd(related_records)
-          {:msg, {:navigate_to_related, relationship_name, first_related.id}}
-        else
-          :ignore
+        # Use pattern matching instead of length check for better performance
+        case related_records do
+          [first_related | _] ->
+            {:msg, {:navigate_to_related, relationship_name, first_related.id}}
+          [] ->
+            :ignore
         end
       else
         :ignore
@@ -122,20 +123,24 @@ defmodule AshAdminTui.Views.DetailView do
 
   # Actions - Edit record
   def event_to_msg(%Event.Key{key: :char, char: "e"}, state) do
-    {:msg, {:edit_record, state.record.id}}
+    # Use string keys to avoid atom table exhaustion
+    {:msg, {:edit_record, Map.get(state.record, "id")}}
   end
 
   def event_to_msg(%Event.Key{key: :char, char: "E"}, state) do
-    {:msg, {:edit_record, state.record.id}}
+    # Use string keys to avoid atom table exhaustion
+    {:msg, {:edit_record, Map.get(state.record, "id")}}
   end
 
   # Actions - Delete record
   def event_to_msg(%Event.Key{key: :char, char: "d"}, state) do
-    {:msg, {:delete_record, state.record.id}}
+    # Use string keys to avoid atom table exhaustion
+    {:msg, {:delete_record, Map.get(state.record, "id")}}
   end
 
   def event_to_msg(%Event.Key{key: :char, char: "D"}, state) do
-    {:msg, {:delete_record, state.record.id}}
+    # Use string keys to avoid atom table exhaustion
+    {:msg, {:delete_record, Map.get(state.record, "id")}}
   end
 
   # Actions - Back to list
@@ -153,11 +158,13 @@ defmodule AshAdminTui.Views.DetailView do
 
   # Actions - Show actions
   def event_to_msg(%Event.Key{key: :char, char: "a"}, state) do
-    {:msg, {:show_actions, state.record.id}}
+    # Use string keys to avoid atom table exhaustion
+    {:msg, {:show_actions, Map.get(state.record, "id")}}
   end
 
   def event_to_msg(%Event.Key{key: :char, char: "A"}, state) do
-    {:msg, {:show_actions, state.record.id}}
+    # Use string keys to avoid atom table exhaustion
+    {:msg, {:show_actions, Map.get(state.record, "id")}}
   end
 
   def event_to_msg(_event, _state), do: :ignore
@@ -240,7 +247,9 @@ defmodule AshAdminTui.Views.DetailView do
   # Private helper functions
 
   defp render_title(state) do
-    title = "#{state.resource.name} ##{state.record.id}"
+    # Use string keys to avoid atom table exhaustion
+    record_id = Map.get(state.record, "id")
+    title = "#{state.resource.name} ##{record_id}"
     {Label, %{text: title, style: :bold}}
   end
 
@@ -258,9 +267,9 @@ defmodule AshAdminTui.Views.DetailView do
   end
 
   defp render_field_row(field_name, record, selected) do
-    field_atom = String.to_atom(field_name)
-    value = Map.get(record, field_atom, nil)
-    formatted_value = format_field(field_atom, value)
+    # Use string keys to avoid atom table exhaustion
+    value = Map.get(record, field_name, nil)
+    formatted_value = format_field(field_name, value)
 
     style = if selected, do: :reverse, else: :normal
 
@@ -272,7 +281,8 @@ defmodule AshAdminTui.Views.DetailView do
   end
 
   defp render_relationships(state) do
-    if map_size(state.relationships) == 0 do
+    # Use Enum.empty? instead of map_size for better performance
+    if Enum.empty?(state.relationships) do
       {Label, %{text: "", style: :normal}}
     else
       total_fields = length(state.fields)
@@ -295,14 +305,15 @@ defmodule AshAdminTui.Views.DetailView do
   defp render_relationship_row(relationship_name, related_records, selected) do
     style = if selected, do: :reverse, else: :normal
 
-    count = length(related_records)
-    display = if count > 0 do
-      first_record = hd(related_records)
-      identifier = get_relationship_identifier(first_record)
-      suffix = if count > 1, do: " (+#{count - 1} more)", else: ""
-      "→ #{identifier}#{suffix}"
-    else
-      "(none)"
+    # Use pattern matching instead of length check for better performance
+    display = case related_records do
+      [] ->
+        "(none)"
+      [first_record | rest] ->
+        identifier = get_relationship_identifier(first_record)
+        count = length(rest) + 1
+        suffix = if count > 1, do: " (+#{count - 1} more)", else: ""
+        "→ #{identifier}#{suffix}"
     end
 
     {HStack, %{}, [
@@ -321,7 +332,7 @@ defmodule AshAdminTui.Views.DetailView do
 
   Handles different data types with appropriate formatting and styling.
   """
-  @spec format_field(atom(), any()) :: String.t()
+  @spec format_field(String.t(), any()) :: String.t()
   def format_field(_field_name, value) when is_binary(value), do: value
 
   def format_field(_field_name, value) when is_integer(value) do
@@ -378,14 +389,15 @@ defmodule AshAdminTui.Views.DetailView do
   # Mock data generators
 
   defp load_mock_record("User", record_id) do
+    # Use string keys to avoid atom table exhaustion
     %{
-      id: record_id,
-      name: "User #{record_id}",
-      email: "user#{record_id}@example.com",
-      active: rem(record_id, 2) == 0,
-      created_at: ~D[2024-01-15],
-      last_login: ~U[2024-12-01 10:30:00Z],
-      post_count: record_id * 5
+      "id" => record_id,
+      "name" => "User #{record_id}",
+      "email" => "user#{record_id}@example.com",
+      "active" => rem(record_id, 2) == 0,
+      "created_at" => ~D[2024-01-15],
+      "last_login" => ~U[2024-12-01 10:30:00Z],
+      "post_count" => record_id * 5
     }
   end
 
@@ -395,24 +407,26 @@ defmodule AshAdminTui.Views.DetailView do
     date_string = "2024-11-#{String.pad_leading(Integer.to_string(day), 2, "0")}T14:30:00Z"
     {:ok, published_at, 0} = DateTime.from_iso8601(date_string)
 
+    # Use string keys to avoid atom table exhaustion
     %{
-      id: record_id,
-      title: "Post #{record_id}",
-      body: "This is the body text for post number #{record_id}. It contains some sample content to demonstrate text wrapping.",
-      status: Enum.random(["draft", "published", "archived"]),
-      views: record_id * 100,
-      published_at: published_at,
-      is_featured: rem(record_id, 3) == 0
+      "id" => record_id,
+      "title" => "Post #{record_id}",
+      "body" => "This is the body text for post number #{record_id}. It contains some sample content to demonstrate text wrapping.",
+      "status" => Enum.random(["draft", "published", "archived"]),
+      "views" => record_id * 100,
+      "published_at" => published_at,
+      "is_featured" => rem(record_id, 3) == 0
     }
   end
 
   defp load_mock_record(_resource, record_id) do
+    # Use string keys to avoid atom table exhaustion
     %{
-      id: record_id,
-      name: "Record #{record_id}",
-      description: "Sample record for testing",
-      created_at: ~D[2024-01-01],
-      updated_at: ~U[2024-12-15 08:00:00Z]
+      "id" => record_id,
+      "name" => "Record #{record_id}",
+      "description" => "Sample record for testing",
+      "created_at" => ~D[2024-01-01],
+      "updated_at" => ~U[2024-12-15 08:00:00Z]
     }
   end
 

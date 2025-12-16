@@ -102,69 +102,34 @@ defmodule AshAdminTui.Views.ListView do
 
   # Actions
   def event_to_msg(%Event.Key{key: :enter}, state) do
-    selected_record = Enum.at(state.records, state.selected_row)
-    if selected_record do
-      {:msg, {:view_detail, selected_record.id}}
-    else
-      :ignore
-    end
+    with_selected_record_id(state, &{:view_detail, &1})
   end
 
   def event_to_msg(%Event.Key{key: :char, char: "n"}, _state), do: {:msg, :new_record}
   def event_to_msg(%Event.Key{key: :char, char: "N"}, _state), do: {:msg, :new_record}
 
   def event_to_msg(%Event.Key{key: :char, char: "e"}, state) do
-    selected_record = Enum.at(state.records, state.selected_row)
-    if selected_record do
-      {:msg, {:edit_record, selected_record.id}}
-    else
-      :ignore
-    end
+    with_selected_record_id(state, &{:edit_record, &1})
   end
 
   def event_to_msg(%Event.Key{key: :char, char: "E"}, state) do
-    selected_record = Enum.at(state.records, state.selected_row)
-    if selected_record do
-      {:msg, {:edit_record, selected_record.id}}
-    else
-      :ignore
-    end
+    with_selected_record_id(state, &{:edit_record, &1})
   end
 
   def event_to_msg(%Event.Key{key: :char, char: "d"}, state) do
-    selected_record = Enum.at(state.records, state.selected_row)
-    if selected_record do
-      {:msg, {:delete_record, selected_record.id}}
-    else
-      :ignore
-    end
+    with_selected_record_id(state, &{:delete_record, &1})
   end
 
   def event_to_msg(%Event.Key{key: :char, char: "D"}, state) do
-    selected_record = Enum.at(state.records, state.selected_row)
-    if selected_record do
-      {:msg, {:delete_record, selected_record.id}}
-    else
-      :ignore
-    end
+    with_selected_record_id(state, &{:delete_record, &1})
   end
 
   def event_to_msg(%Event.Key{key: :char, char: "a"}, state) do
-    selected_record = Enum.at(state.records, state.selected_row)
-    if selected_record do
-      {:msg, {:show_actions, selected_record.id}}
-    else
-      :ignore
-    end
+    with_selected_record_id(state, &{:show_actions, &1})
   end
 
   def event_to_msg(%Event.Key{key: :char, char: "A"}, state) do
-    selected_record = Enum.at(state.records, state.selected_row)
-    if selected_record do
-      {:msg, {:show_actions, selected_record.id}}
-    else
-      :ignore
-    end
+    with_selected_record_id(state, &{:show_actions, &1})
   end
 
   def event_to_msg(_event, _state), do: :ignore
@@ -274,7 +239,8 @@ defmodule AshAdminTui.Views.ListView do
     style = if selected, do: :reverse, else: :normal
 
     cells = Enum.map(columns, fn col ->
-      value = Map.get(record, String.to_atom(col), "")
+      # Use string keys to avoid atom table exhaustion
+      value = Map.get(record, col, "")
       text = format_value(value)
       {Label, %{text: String.pad_trailing(text, 15), style: style}}
     end)
@@ -300,36 +266,55 @@ defmodule AshAdminTui.Views.ListView do
   defp format_value(nil), do: ""
   defp format_value(value), do: inspect(value)
 
+  # Selected record helpers
+
+  # Helper function to get selected record and extract its ID for actions.
+  # Reduces code duplication and ensures consistent string key access.
+  defp with_selected_record_id(state, msg_builder) when is_function(msg_builder, 1) do
+    case get_selected_record(state) do
+      nil -> :ignore
+      record -> {:msg, msg_builder.(Map.get(record, "id"))}
+    end
+  end
+
+  # Gets the currently selected record from state, or nil if none selected.
+  defp get_selected_record(state) do
+    Enum.at(state.records, state.selected_row)
+  end
+
   # Mock data generators
 
   defp generate_mock_records("User", count) do
     for i <- 1..count do
+      # Use string keys to avoid atom table exhaustion
       %{
-        id: i,
-        name: "User #{i}",
-        email: "user#{i}@example.com",
-        active: rem(i, 2) == 0
+        "id" => i,
+        "name" => "User #{i}",
+        "email" => "user#{i}@example.com",
+        "active" => rem(i, 2) == 0
       }
     end
   end
 
   defp generate_mock_records("Post", count) do
     for i <- 1..count do
+      # Use string keys to avoid atom table exhaustion
       %{
-        id: i,
-        title: "Post #{i}",
-        status: Enum.random(["draft", "published", "archived"]),
-        views: i * 10
+        "id" => i,
+        "title" => "Post #{i}",
+        "status" => Enum.random(["draft", "published", "archived"]),
+        "views" => i * 10
       }
     end
   end
 
   defp generate_mock_records(_resource, count) do
     for i <- 1..count do
+      # Use string keys to avoid atom table exhaustion
       %{
-        id: i,
-        name: "Record #{i}",
-        created_at: "2024-01-#{String.pad_leading(Integer.to_string(i), 2, "0")}"
+        "id" => i,
+        "name" => "Record #{i}",
+        "created_at" => "2024-01-#{String.pad_leading(Integer.to_string(i), 2, "0")}"
       }
     end
   end

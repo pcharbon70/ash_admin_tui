@@ -203,26 +203,26 @@ defmodule AshAdminTui.Views.FormView do
   end
 
   def update({:toggle_boolean, field_name}, state) do
-    field_atom = String.to_atom(field_name)
-    current_value = Map.get(state.form_values, field_atom, false)
-    new_values = Map.put(state.form_values, field_atom, !current_value)
+    # Use string keys to avoid atom table exhaustion
+    current_value = Map.get(state.form_values, field_name, false)
+    new_values = Map.put(state.form_values, field_name, !current_value)
 
     {%{state | form_values: new_values, has_changes: true}, []}
   end
 
   def update({:append_char, field_name, char}, state) do
-    field_atom = String.to_atom(field_name)
-    current_value = Map.get(state.form_values, field_atom, "")
+    # Use string keys to avoid atom table exhaustion
+    current_value = Map.get(state.form_values, field_name, "")
     current_str = to_string(current_value)
     new_value = current_str <> char
-    new_values = Map.put(state.form_values, field_atom, new_value)
+    new_values = Map.put(state.form_values, field_name, new_value)
 
     {%{state | form_values: new_values, has_changes: true}, []}
   end
 
   def update({:backspace_field, field_name}, state) do
-    field_atom = String.to_atom(field_name)
-    current_value = Map.get(state.form_values, field_atom, "")
+    # Use string keys to avoid atom table exhaustion
+    current_value = Map.get(state.form_values, field_name, "")
     current_str = to_string(current_value)
 
     new_value = if String.length(current_str) > 0 do
@@ -231,7 +231,7 @@ defmodule AshAdminTui.Views.FormView do
       ""
     end
 
-    new_values = Map.put(state.form_values, field_atom, new_value)
+    new_values = Map.put(state.form_values, field_name, new_value)
 
     {%{state | form_values: new_values, has_changes: true}, []}
   end
@@ -240,7 +240,8 @@ defmodule AshAdminTui.Views.FormView do
     # Validate form
     errors = validate_form(state.resource.name, state.form_values)
 
-    if map_size(errors) == 0 do
+    # Use Enum.empty? instead of map_size for better performance
+    if Enum.empty?(errors) do
       # No errors - submit to parent
       {state, [{:parent_msg, {:submit_form, state.mode, state.resource.name, state.record_id, state.form_values}}]}
     else
@@ -293,7 +294,8 @@ defmodule AshAdminTui.Views.FormView do
     |> Enum.with_index()
     |> Enum.flat_map(fn {field_name, index} ->
       focused = index == state.focused_field_idx
-      error = Map.get(state.errors, String.to_atom(field_name))
+      # Use string keys to avoid atom table exhaustion
+      error = Map.get(state.errors, field_name)
 
       field_row = render_field_row(state, field_name, focused)
 
@@ -309,9 +311,9 @@ defmodule AshAdminTui.Views.FormView do
   end
 
   defp render_field_row(state, field_name, focused) do
-    field_atom = String.to_atom(field_name)
+    # Use string keys to avoid atom table exhaustion
     field_type = get_field_type(state.resource.name, field_name)
-    value = Map.get(state.form_values, field_atom)
+    value = Map.get(state.form_values, field_name)
 
     label_text = String.pad_trailing("#{field_name}:", 20)
     input_widget = render_input_widget(field_type, value, focused)
@@ -323,14 +325,6 @@ defmodule AshAdminTui.Views.FormView do
   end
 
   defp render_input_widget(:string, value, focused) do
-    display_value = if value, do: to_string(value), else: ""
-    text = "[#{display_value}]"
-    style = if focused, do: :reverse, else: :normal
-
-    {Label, %{text: text, style: style}}
-  end
-
-  defp render_input_widget(:integer, value, focused) do
     display_value = if value, do: to_string(value), else: ""
     text = "[#{display_value}]"
     style = if focused, do: :reverse, else: :normal
@@ -368,6 +362,16 @@ defmodule AshAdminTui.Views.FormView do
 
   # Field metadata and validation
 
+  # Helper function to validate required fields
+  # Returns updated errors map if field is missing or empty
+  defp validate_required(errors, form_values, field_name, error_message \\ "is required") do
+    if !Map.has_key?(form_values, field_name) || Map.get(form_values, field_name) == "" do
+      Map.put(errors, field_name, error_message)
+    else
+      errors
+    end
+  end
+
   defp get_fields_for_resource("User") do
     ["name", "email", "active"]
   end
@@ -395,33 +399,16 @@ defmodule AshAdminTui.Views.FormView do
   defp get_field_type(_resource, _field), do: :string
 
   defp validate_form("User", form_values) do
-    errors = %{}
-
-    errors = if !Map.has_key?(form_values, :name) || Map.get(form_values, :name) == "" do
-      Map.put(errors, :name, "is required")
-    else
-      errors
-    end
-
-    errors = if !Map.has_key?(form_values, :email) || Map.get(form_values, :email) == "" do
-      Map.put(errors, :email, "is required")
-    else
-      errors
-    end
-
-    errors
+    # Use string keys to avoid atom table exhaustion
+    %{}
+    |> validate_required(form_values, "name")
+    |> validate_required(form_values, "email")
   end
 
   defp validate_form("Post", form_values) do
-    errors = %{}
-
-    errors = if !Map.has_key?(form_values, :title) || Map.get(form_values, :title) == "" do
-      Map.put(errors, :title, "is required")
-    else
-      errors
-    end
-
-    errors
+    # Use string keys to avoid atom table exhaustion
+    %{}
+    |> validate_required(form_values, "title")
   end
 
   defp validate_form(_resource, _form_values) do
@@ -430,27 +417,30 @@ defmodule AshAdminTui.Views.FormView do
   end
 
   defp load_record_values("User", record_id) do
+    # Use string keys to avoid atom table exhaustion
     %{
-      name: "User #{record_id}",
-      email: "user#{record_id}@example.com",
-      active: rem(record_id, 2) == 0
+      "name" => "User #{record_id}",
+      "email" => "user#{record_id}@example.com",
+      "active" => rem(record_id, 2) == 0
     }
   end
 
   defp load_record_values("Post", record_id) do
+    # Use string keys to avoid atom table exhaustion
     %{
-      title: "Post #{record_id}",
-      body: "Body text for post #{record_id}",
-      status: "published",
-      is_featured: rem(record_id, 3) == 0
+      "title" => "Post #{record_id}",
+      "body" => "Body text for post #{record_id}",
+      "status" => "published",
+      "is_featured" => rem(record_id, 3) == 0
     }
   end
 
   defp load_record_values(_resource, record_id) do
+    # Use string keys to avoid atom table exhaustion
     %{
-      name: "Record #{record_id}",
-      description: "Description for record #{record_id}",
-      active: true
+      "name" => "Record #{record_id}",
+      "description" => "Description for record #{record_id}",
+      "active" => true
     }
   end
 end
