@@ -43,6 +43,7 @@ defmodule AshAdminTui.Components.ContentArea do
   5. On error, transition to `:error` view
   """
 
+  alias AshAdminTui.Views.{DetailView, FormView, ListView}
   alias TermUI.Widget.{Label, VStack}
 
   @doc """
@@ -285,54 +286,18 @@ defmodule AshAdminTui.Components.ContentArea do
     ]}
   end
 
-  # Placeholder view renderers (will be replaced with actual view components in Phase 2)
+  # View renderers - delegate to actual view components
 
-  defp render_list_view(_state) do
-    {VStack, %{}, [
-      {Label, %{
-        text: """
-
-
-        [List View]
-
-        Table of records will be displayed here
-
-        """,
-        align: :center
-      }}
-    ]}
+  defp render_list_view(list_state) do
+    ListView.view(list_state)
   end
 
-  defp render_detail_view(_state) do
-    {VStack, %{}, [
-      {Label, %{
-        text: """
-
-
-        [Detail View]
-
-        Record details will be displayed here
-
-        """,
-        align: :center
-      }}
-    ]}
+  defp render_detail_view(detail_state) do
+    DetailView.view(detail_state)
   end
 
-  defp render_form_view(_state) do
-    {VStack, %{}, [
-      {Label, %{
-        text: """
-
-
-        [Form View]
-
-        Create/Edit form will be displayed here
-
-        """,
-        align: :center
-      }}
-    ]}
+  defp render_form_view(form_state) do
+    FormView.view(form_state)
   end
 
   defp render_action_view(_state) do
