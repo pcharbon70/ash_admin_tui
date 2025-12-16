@@ -147,67 +147,67 @@ Build toast notification system for displaying success/error messages that auto-
 
 ## 2.4 Sidebar Navigation Component
 
-- [ ] **Section 2.4 Complete**
+- [x] **Section 2.4 Complete**
 
 The sidebar provides hierarchical navigation through domains and resources. It uses a tree-like structure with expand/collapse functionality and keyboard navigation that wraps at boundaries.
 
 ### 2.4.1 Implement Sidebar Component Structure
 
-- [ ] **Task 2.4.1 Complete**
+- [x] **Task 2.4.1 Complete**
 
 Create the sidebar component with tree menu rendering and selection state.
 
-- [ ] 2.4.1.1 Create lib/ash_admin_tui/components/sidebar.ex module
-- [ ] 2.4.1.2 Define state: `%{domains: [...], selected_domain_idx: 0, selected_resource_idx: 0, expanded_domains: MapSet}`
-- [ ] 2.4.1.3 Implement view/1 rendering tree structure with expand/collapse indicators
-- [ ] 2.4.1.4 Use ▼ for expanded domains, ▶ for collapsed domains
-- [ ] 2.4.1.5 Use → or highlight for selected resource
-- [ ] 2.4.1.6 Render domain names in bold or with background color
-- [ ] 2.4.1.7 Apply selection highlighting with inverse video or colored background
+- [x] 2.4.1.1 Create lib/ash_admin_tui/components/sidebar.ex module
+- [x] 2.4.1.2 Define state: `%{domains: [...], selected_domain_idx: 0, selected_resource_idx: 0, expanded_domains: MapSet}`
+- [x] 2.4.1.3 Implement view/1 rendering tree structure with expand/collapse indicators
+- [x] 2.4.1.4 Use ▼ for expanded domains, ▶ for collapsed domains
+- [x] 2.4.1.5 Use → or highlight for selected resource
+- [x] 2.4.1.6 Render domain names in bold or with background color
+- [x] 2.4.1.7 Apply selection highlighting with inverse video or colored background
 
 ### 2.4.2 Implement Keyboard Navigation
 
-- [ ] **Task 2.4.2 Complete**
+- [x] **Task 2.4.2 Complete**
 
 Build keyboard navigation handling for up/down movement, expand/collapse, and selection.
 
-- [ ] 2.4.2.1 Implement event_to_msg/2 mapping arrow keys to navigation messages
-- [ ] 2.4.2.2 Handle Down arrow: move selection to next visible resource, wrapping at end
-- [ ] 2.4.2.3 Handle Up arrow: move selection to previous visible resource, wrapping at start
-- [ ] 2.4.2.4 Handle Right arrow: expand current domain if collapsed
-- [ ] 2.4.2.5 Handle Left arrow: collapse current domain if expanded
-- [ ] 2.4.2.6 Handle Enter: send {:select_resource, resource_name} message to parent
-- [ ] 2.4.2.7 Support vim-style navigation (j/k for down/up)
+- [x] 2.4.2.1 Implement event_to_msg/2 mapping arrow keys to navigation messages
+- [x] 2.4.2.2 Handle Down arrow: move selection to next visible resource, wrapping at end
+- [x] 2.4.2.3 Handle Up arrow: move selection to previous visible resource, wrapping at start
+- [x] 2.4.2.4 Handle Right arrow: expand current domain if collapsed
+- [x] 2.4.2.5 Handle Left arrow: collapse current domain if expanded
+- [x] 2.4.2.6 Handle Enter: send {:select_resource, resource_name} message to parent
+- [x] 2.4.2.7 Support vim-style navigation (j/k for down/up)
 
 ### 2.4.3 Implement Selection Logic
 
-- [ ] **Task 2.4.3 Complete**
+- [x] **Task 2.4.3 Complete**
 
 Build the update/2 logic for handling navigation and selection messages.
 
-- [ ] 2.4.3.1 Implement update/2 handling {:move_selection, :down} message
-- [ ] 2.4.3.2 Implement update/2 handling {:move_selection, :up} message
-- [ ] 2.4.3.3 Implement update/2 handling {:toggle_domain, domain_name} message
-- [ ] 2.4.3.4 Implement selection wrapping at list boundaries
-- [ ] 2.4.3.5 Skip collapsed domain resources when navigating
-- [ ] 2.4.3.6 Return {:select_resource, resource} message to parent on Enter
+- [x] 2.4.3.1 Implement update/2 handling {:move_selection, :down} message
+- [x] 2.4.3.2 Implement update/2 handling {:move_selection, :up} message
+- [x] 2.4.3.3 Implement update/2 handling {:toggle_domain, domain_name} message
+- [x] 2.4.3.4 Implement selection wrapping at list boundaries
+- [x] 2.4.3.5 Skip collapsed domain resources when navigating
+- [x] 2.4.3.6 Return {:select_resource, resource} message to parent on Enter
 
 ### 2.4.4 Unit Tests - Section 2.4
 
-- [ ] **Unit Tests 2.4 Complete**
+- [x] **Unit Tests 2.4 Complete**
 
-- [ ] Test Sidebar.view/1 renders tree structure
-- [ ] Test expanded domains show ▼ indicator
-- [ ] Test collapsed domains show ▶ indicator
-- [ ] Test selected resource has highlight
-- [ ] Test Down arrow moves selection down
-- [ ] Test Up arrow moves selection up
-- [ ] Test selection wraps at list boundaries
-- [ ] Test Right arrow expands collapsed domain
-- [ ] Test Left arrow collapses expanded domain
-- [ ] Test Enter generates select_resource message
-- [ ] Test vim-style keys (j/k) work for navigation
-- [ ] Test collapsed domain resources are skipped
+- [x] Test Sidebar.view/1 renders tree structure
+- [x] Test expanded domains show ▼ indicator
+- [x] Test collapsed domains show ▶ indicator
+- [x] Test selected resource has highlight
+- [x] Test Down arrow moves selection down
+- [x] Test Up arrow moves selection up
+- [x] Test selection wraps at list boundaries
+- [x] Test Right arrow expands collapsed domain
+- [x] Test Left arrow collapses expanded domain
+- [x] Test Enter generates select_resource message
+- [x] Test vim-style keys (j/k) work for navigation
+- [x] Test collapsed domain resources are skipped
 
 ## 2.5 Content Area Router
 
