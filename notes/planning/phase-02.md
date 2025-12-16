@@ -211,49 +211,49 @@ Build the update/2 logic for handling navigation and selection messages.
 
 ## 2.5 Content Area Router
 
-- [ ] **Section 2.5 Complete**
+- [x] **Section 2.5 Complete**
 
 The content area router switches between different view types based on application state. It manages view-specific state isolation and coordinates view transitions with loading states.
 
 ### 2.5.1 Implement Content Area Component
 
-- [ ] **Task 2.5.1 Complete**
+- [x] **Task 2.5.1 Complete**
 
 Create the content area router that renders the appropriate view based on current state.
 
-- [ ] 2.5.1.1 Create lib/ash_admin_tui/components/content_area.ex module
-- [ ] 2.5.1.2 Define state with view type: `:list | :detail | :form | :action | :loading | :error`
-- [ ] 2.5.1.3 Define view-specific state map: `%{list: %{}, detail: %{}, form: %{}, action: %{}}`
-- [ ] 2.5.1.4 Implement view/1 with case statement routing to view components
-- [ ] 2.5.1.5 Route :list to ListView.view/1
-- [ ] 2.5.1.6 Route :detail to DetailView.view/1
-- [ ] 2.5.1.7 Route :form to FormView.view/1
+- [x] 2.5.1.1 Create lib/ash_admin_tui/components/content_area.ex module
+- [x] 2.5.1.2 Define state with view type: `:list | :detail | :form | :action | :loading | :error`
+- [x] 2.5.1.3 Define view-specific state map: `%{list: %{}, detail: %{}, form: %{}, action: %{}}`
+- [x] 2.5.1.4 Implement view/1 with case statement routing to view components
+- [x] 2.5.1.5 Route :list to ListView.view/1
+- [x] 2.5.1.6 Route :detail to DetailView.view/1
+- [x] 2.5.1.7 Route :form to FormView.view/1
 
 ### 2.5.2 Implement View Transition Coordination
 
-- [ ] **Task 2.5.2 Complete**
+- [x] **Task 2.5.2 Complete**
 
 Build view transition logic with loading states and data fetching coordination.
 
-- [ ] 2.5.2.1 Implement change_view/2 function taking target view and params
-- [ ] 2.5.2.2 Set view to :loading and render spinner during transitions
-- [ ] 2.5.2.3 Return command to fetch data for target view
-- [ ] 2.5.2.4 On data load complete, transition to target view with data
-- [ ] 2.5.2.5 On error, transition to :error view with error message
-- [ ] 2.5.2.6 Preserve view state when returning to previous view
+- [x] 2.5.2.1 Implement change_view/2 function taking target view and params
+- [x] 2.5.2.2 Set view to :loading and render spinner during transitions
+- [x] 2.5.2.3 Return command to fetch data for target view
+- [x] 2.5.2.4 On data load complete, transition to target view with data
+- [x] 2.5.2.5 On error, transition to :error view with error message
+- [x] 2.5.2.6 Preserve view state when returning to previous view
 
 ### 2.5.3 Unit Tests - Section 2.5
 
-- [ ] **Unit Tests 2.5 Complete**
+- [x] **Unit Tests 2.5 Complete**
 
-- [ ] Test ContentArea routes :list to ListView component
-- [ ] Test ContentArea routes :detail to DetailView component
-- [ ] Test ContentArea routes :form to FormView component
-- [ ] Test ContentArea shows loading spinner during transitions
-- [ ] Test change_view/2 sets view to :loading
-- [ ] Test view transitions to target after data loads
-- [ ] Test error state displays on data fetch failure
-- [ ] Test previous view state is preserved on return
+- [x] Test ContentArea routes :list to ListView component
+- [x] Test ContentArea routes :detail to DetailView component
+- [x] Test ContentArea routes :form to FormView component
+- [x] Test ContentArea shows loading spinner during transitions
+- [x] Test change_view/2 sets view to :loading
+- [x] Test view transitions to target after data loads
+- [x] Test error state displays on data fetch failure
+- [x] Test previous view state is preserved on return
 
 ## 2.6 List View Component
 
