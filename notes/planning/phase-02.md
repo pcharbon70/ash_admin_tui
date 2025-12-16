@@ -257,69 +257,69 @@ Build view transition logic with loading states and data fetching coordination.
 
 ## 2.6 List View Component
 
-- [ ] **Section 2.6 Complete**
+- [x] **Section 2.6 Complete**
 
 The list view displays records in a table format with sorting, pagination, and row selection. It uses TermUI's Table widget and handles keyboard navigation for scrolling and selection.
 
 ### 2.6.1 Implement List View Structure
 
-- [ ] **Task 2.6.1 Complete**
+- [x] **Task 2.6.1 Complete**
 
 Create the list view component with table rendering and state management.
 
-- [ ] 2.6.1.1 Create lib/ash_admin_tui/views/list_view.ex module
-- [ ] 2.6.1.2 Define state: `%{resource: %{}, records: [], columns: [], selected_row: 0, sort: %{}, page: 1, total: 0}`
-- [ ] 2.6.1.3 Implement init/1 to initialize with mock data (10 sample records)
-- [ ] 2.6.1.4 Implement view/1 using TermUI Table widget
-- [ ] 2.6.1.5 Render table header with column names
-- [ ] 2.6.1.6 Render table rows with record data
-- [ ] 2.6.1.7 Apply selection highlighting to selected row
+- [x] 2.6.1.1 Create lib/ash_admin_tui/views/list_view.ex module
+- [x] 2.6.1.2 Define state: `%{resource: %{}, records: [], columns: [], selected_row: 0, sort: %{}, page: 1, total: 0}`
+- [x] 2.6.1.3 Implement init/1 to initialize with mock data (10 sample records)
+- [x] 2.6.1.4 Implement view/1 using TermUI Table widget
+- [x] 2.6.1.5 Render table header with column names
+- [x] 2.6.1.6 Render table rows with record data
+- [x] 2.6.1.7 Apply selection highlighting to selected row
 
 ### 2.6.2 Implement Table Navigation
 
-- [ ] **Task 2.6.2 Complete**
+- [x] **Task 2.6.2 Complete**
 
 Build keyboard navigation for table scrolling and row selection.
 
-- [ ] 2.6.2.1 Implement event_to_msg/2 for arrow keys and page navigation
-- [ ] 2.6.2.2 Handle Down arrow: increment selected_row, wrapping at end
-- [ ] 2.6.2.3 Handle Up arrow: decrement selected_row, wrapping at start
-- [ ] 2.6.2.4 Handle PgDown: advance by page_size rows
-- [ ] 2.6.2.5 Handle PgUp: go back by page_size rows
-- [ ] 2.6.2.6 Handle Home: jump to first row
-- [ ] 2.6.2.7 Handle End: jump to last row
-- [ ] 2.6.2.8 Handle Enter: generate {:view_detail, record_id} message
+- [x] 2.6.2.1 Implement event_to_msg/2 for arrow keys and page navigation
+- [x] 2.6.2.2 Handle Down arrow: increment selected_row, wrapping at end
+- [x] 2.6.2.3 Handle Up arrow: decrement selected_row, wrapping at start
+- [x] 2.6.2.4 Handle PgDown: advance by page_size rows
+- [x] 2.6.2.5 Handle PgUp: go back by page_size rows
+- [x] 2.6.2.6 Handle Home: jump to first row
+- [x] 2.6.2.7 Handle End: jump to last row
+- [x] 2.6.2.8 Handle Enter: generate {:view_detail, record_id} message
 
 ### 2.6.3 Implement Action Shortcuts
 
-- [ ] **Task 2.6.3 Complete**
+- [x] **Task 2.6.3 Complete**
 
 Add keyboard shortcuts for common actions (new, edit, delete).
 
-- [ ] 2.6.3.1 Handle 'n' key: generate {:new_record} message
-- [ ] 2.6.3.2 Handle 'e' key: generate {:edit_record, selected_id} message
-- [ ] 2.6.3.3 Handle 'd' key: generate {:delete_record, selected_id} message
-- [ ] 2.6.3.4 Handle 'a' key: generate {:show_actions, selected_id} message
-- [ ] 2.6.3.5 Add footer showing available actions
-- [ ] 2.6.3.6 Display pagination info: "Page X of Y | Z records"
+- [x] 2.6.3.1 Handle 'n' key: generate {:new_record} message
+- [x] 2.6.3.2 Handle 'e' key: generate {:edit_record, selected_id} message
+- [x] 2.6.3.3 Handle 'd' key: generate {:delete_record, selected_id} message
+- [x] 2.6.3.4 Handle 'a' key: generate {:show_actions, selected_id} message
+- [x] 2.6.3.5 Add footer showing available actions
+- [x] 2.6.3.6 Display pagination info: "Page X of Y | Z records"
 
 ### 2.6.4 Unit Tests - Section 2.6
 
-- [ ] **Unit Tests 2.6 Complete**
+- [x] **Unit Tests 2.6 Complete**
 
-- [ ] Test ListView.init/1 creates initial state with mock data
-- [ ] Test ListView.view/1 renders table with headers
-- [ ] Test table displays all records
-- [ ] Test selected row has highlighting
-- [ ] Test Down arrow moves selection down
-- [ ] Test Up arrow moves selection up
-- [ ] Test selection wraps at boundaries
-- [ ] Test PgDown/PgUp navigate by page
-- [ ] Test Home/End jump to first/last
-- [ ] Test Enter generates view_detail message
-- [ ] Test 'n' generates new_record message
-- [ ] Test 'e' generates edit_record message
-- [ ] Test 'd' generates delete_record message
+- [x] Test ListView.init/1 creates initial state with mock data
+- [x] Test ListView.view/1 renders table with headers
+- [x] Test table displays all records
+- [x] Test selected row has highlighting
+- [x] Test Down arrow moves selection down
+- [x] Test Up arrow moves selection up
+- [x] Test selection wraps at boundaries
+- [x] Test PgDown/PgUp navigate by page
+- [x] Test Home/End jump to first/last
+- [x] Test Enter generates view_detail message
+- [x] Test 'n' generates new_record message
+- [x] Test 'e' generates edit_record message
+- [x] Test 'd' generates delete_record message
 
 ## 2.7 Detail View Component
 
